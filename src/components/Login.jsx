@@ -6,7 +6,7 @@ const Login = () => {
     return (
         <div>
             <Typography variant="h4" gutterBottom>
-                Página Inicial
+                Login
             </Typography>
             <Button variant="contained" color="primary" to="/" component={Link}>
                 Voltar
