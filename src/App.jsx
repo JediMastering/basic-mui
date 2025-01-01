@@ -7,6 +7,7 @@ import System from "./layout/System"
 import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import Dashboard from "./pages/Dashboard";
+import Test from "./pages/Test";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/home" element={<System><Home /></System>} />
+        <Route path="test" element={<Test />} />
         <Route path="/dashboard" element={<System><Dashboard /></System>} />
         <Route path="/settings" element={<System><Settings /></System>} />
         <Route path="/profile" element={<System><Profile /></System>} />
