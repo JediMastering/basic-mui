@@ -1,105 +1,104 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import MuiDrawer from "@mui/material/Drawer";
-import MuiAppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import CssBaseline from "@mui/material/CssBaseline";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
 import MenuIcon from "@mui/icons-material/Menu";
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import IconButton from "@mui/material/IconButton";
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import MailIcon from '@mui/icons-material/Mail';
+import { AppBar, Toolbar } from '@mui/material';
+import { blueGrey } from '@mui/material/colors';
 
-const drawerWidth = 240;
+import { Container } from "@mui/material";
 
-export default function ResponsiveDrawer({ children }) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detecta dispositivos móveis
-  const [open, setOpen] = React.useState(!isMobile); // Fechado por padrão em dispositivos móveis
+import { Link } from "react-router-dom";
 
-  const toggleDrawer = () => {
-    setOpen(!open);
+const blueGreyColor = blueGrey[800];
+
+export default function SwipeableTemporaryDrawer({children}) {
+  const [state, setState] = React.useState({ left: false });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
   };
 
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      {/* AppBar */}
-      <MuiAppBar position="fixed" sx={{ zIndex: theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={toggleDrawer}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h6" noWrap>
-            Responsive Drawer
-          </Typography>
-        </Toolbar>
-      </MuiAppBar>
-
-      {/* Drawer */}
-      <MuiDrawer
-        variant={isMobile ? "temporary" : "permanent"}
-        open={open}
-        onClose={toggleDrawer} // Necessário para o modo "temporary"
-        ModalProps={{ keepMounted: true }} // Melhora o desempenho em dispositivos móveis
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
-        }}
-      >
-        <Box>
-          <IconButton onClick={toggleDrawer}>
-            {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-          </IconButton>
-        </Box>
-        <Divider />
-        <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </MuiDrawer>
-
-      {/* Conteúdo principal */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          padding: 3,
-          marginLeft: isMobile ? 0 : drawerWidth, // Ajusta o espaço ao lado do drawer
-        }}
-      >
-        <Toolbar /> {/* Adiciona um espaçamento para o AppBar */}
-        {children}
-      </Box>
+  const list = (anchor) => (
+    <Box
+      sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
+      role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <List>
+        <ListItem component={Link} to="/dashboard">
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem component={Link} to="/settings">
+          <ListItemText primary="Configurações" />
+        </ListItem>
+        <ListItem component={Link} to="/profile">
+          <ListItemText primary="Perfil" />
+        </ListItem>
+        <ListItem component={Link} to="/">
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </List>
     </Box>
+  );
+
+  return (
+    <div>
+      {['left'].map((anchor) => (
+        <React.Fragment key={anchor}>
+          <AppBar
+            sx={{ backgroundColor: blueGreyColor }}
+            position="fixed" >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={toggleDrawer(anchor, true)}
+                edge="start"
+                sx={[
+                  {
+                    m: 2,
+                  },
+
+                ]}
+              >
+                <MenuIcon />
+              </IconButton>
+            </Toolbar>
+          </AppBar>
+          <SwipeableDrawer
+            anchor={anchor}
+            open={state[anchor]}
+            onClose={toggleDrawer(anchor, false)}
+            onOpen={toggleDrawer(anchor, true)}
+          >
+            {list(anchor)}
+          </SwipeableDrawer>
+          <Container sx={{ mt: 4 }}>
+            {children}
+          </Container>
+        </React.Fragment>
+      ))}
+    </div>
   );
 }
