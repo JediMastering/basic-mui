@@ -16,16 +16,18 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import MailIcon from '@mui/icons-material/Mail';
 import { AppBar, Toolbar } from '@mui/material';
 import { blueGrey } from '@mui/material/colors';
-
+import { useTheme } from '@mui/material/styles';
 import { Container } from "@mui/material";
 
 import { Link } from "react-router-dom";
 
 const blueGreyColor = blueGrey[800];
 
-export default function SwipeableTemporaryDrawer({children}) {
+export default function SwipeableTemporaryDrawer({ children }) {
   const [state, setState] = React.useState({ left: false });
+  const theme = useTheme();
 
+  // Função para abrir/fechar o Drawer
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event &&
@@ -34,10 +36,10 @@ export default function SwipeableTemporaryDrawer({children}) {
     ) {
       return;
     }
-
     setState({ ...state, [anchor]: open });
   };
 
+  // Lista de itens do Drawer
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -45,7 +47,7 @@ export default function SwipeableTemporaryDrawer({children}) {
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
     >
-      <List>
+      <Box>
         <ListItem component={Link} to="/dashboard">
           <ListItemText primary="Dashboard" />
         </ListItem>
@@ -58,7 +60,7 @@ export default function SwipeableTemporaryDrawer({children}) {
         <ListItem component={Link} to="/">
           <ListItemText primary="Logout" />
         </ListItem>
-      </List>
+      </Box>
     </Box>
   );
 
@@ -66,26 +68,22 @@ export default function SwipeableTemporaryDrawer({children}) {
     <div>
       {['left'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <AppBar
-            sx={{ backgroundColor: blueGreyColor }}
-            position="fixed" >
+          {/* AppBar Fixado no topo */}
+          <AppBar position="fixed" sx={{ backgroundColor: blueGreyColor }}>
             <Toolbar>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
                 onClick={toggleDrawer(anchor, true)}
                 edge="start"
-                sx={[
-                  {
-                    m: 2,
-                  },
-
-                ]}
+                sx={{ m: 2 }}
               >
                 <MenuIcon />
               </IconButton>
             </Toolbar>
           </AppBar>
+
+          {/* Drawer */}
           <SwipeableDrawer
             anchor={anchor}
             open={state[anchor]}
@@ -94,7 +92,21 @@ export default function SwipeableTemporaryDrawer({children}) {
           >
             {list(anchor)}
           </SwipeableDrawer>
-          <Container sx={{ mt: 4 }}>
+
+          {/* Container sem margem à esquerda, alinhado ao topo da página */}
+          <Container
+            sx={{
+              marginTop: 8, // Ajuste a margem superior conforme necessário
+              paddingTop:1,
+              paddingLeft: 0, // Remover o padding das laterais
+              paddingRight: 0, // Remover o padding das laterais
+              '@media (min-width:600px)': {
+                paddingLeft: 0, // Definir o padding para telas maiores que 600px
+                paddingRight: 0, // Definir o padding para telas maiores que 600px
+              },
+            }}
+          >
+            {/* Conteúdo aqui */}
             {children}
           </Container>
         </React.Fragment>
