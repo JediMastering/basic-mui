@@ -8,14 +8,6 @@ const Home = () => {
             <Typography variant="h4" gutterBottom>
                 Home
             </Typography>
-            <Button
-                variant="contained"
-                color="primary"
-                component={Link}
-                to="/login1"
-            >
-                Quebrado
-            </Button>
         </div>
     );
 };
