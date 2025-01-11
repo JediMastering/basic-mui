@@ -70,7 +70,7 @@ export default function SwipeableTemporaryDrawer({ children }) {
         <React.Fragment key={anchor}>
           {/* AppBar Fixado no topo */}
           <AppBar position="fixed" sx={{ backgroundColor: blueGreyColor }}>
-            <Toolbar>
+            <Toolbar sx={{ paddingLeft: "0px" }} disableGutters>
               <IconButton
                 color="inherit"
                 aria-label="open drawer"
@@ -97,7 +97,7 @@ export default function SwipeableTemporaryDrawer({ children }) {
           <Container
             sx={{
               marginTop: 8, // Ajuste a margem superior conforme necessário
-              paddingTop:1,
+              paddingTop: 1,
               paddingLeft: 0, // Remover o padding das laterais
               paddingRight: 0, // Remover o padding das laterais
               '@media (min-width:600px)': {
