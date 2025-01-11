@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -9,6 +11,7 @@ const Login = () => {
     e.preventDefault();
     // Aqui você pode adicionar a lógica de login, como uma chamada para API
     console.log("Login submitted:", email, password);
+    navigate("home");
   };
 
   return (
