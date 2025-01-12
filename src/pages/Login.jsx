@@ -8,12 +8,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const url = "";
 
-  localStorage.setItem("authToken", "teste");
-  navigate("home");
-  return;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    localStorage.setItem("authToken", "teste");
+    navigate("home");
+    return;
 
     const response = await fetch(url, {
       method: "POST",
