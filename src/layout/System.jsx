@@ -51,6 +51,9 @@ export default function SwipeableTemporaryDrawer({ children }) {
         <ListItem component={Link} to="/profile">
           <ListItemText primary="Perfil" />
         </ListItem>
+        <ListItem component={Link} to="/table">
+          <ListItemText primary="Tabela" />
+        </ListItem>
         {/* Botão de Logout */}
         <ListItemButton
           onClick={handleLogout}
