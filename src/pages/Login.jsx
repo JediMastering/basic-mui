@@ -6,12 +6,30 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const url = "";
 
-  const handleSubmit = (e) => {
+  localStorage.setItem("authToken", "teste");
+  navigate("home");
+  return;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica de login, como uma chamada para API
-    console.log("Login submitted:", email, password);
-    navigate("home");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    })
+
+    if (response.ok) {
+      const data = await response.json();
+      const token = data.token;
+
+      localStorage.setItem("authToken", token);
+      navigate("home");
+    }
   };
 
   return (
