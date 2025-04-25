@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -23,55 +23,52 @@ function SmartTable({
   total,
   onPageChange,
   onRowSelect,
+  selectedRows = [],
   selectable = false,
   onSortChange,
+  sortColumn,
+  sortDirection = 'asc',
   loading = false,
   emptyMessage = 'Nenhum dado encontrado',
   actions,
 }) {
-  const [selected, setSelected] = useState([]);
-  const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState('asc');
-
-  const isSelected = (row) => selected.includes(rowKey(row));
+  const isSelected = (row) => selectedRows.includes(rowKey(row));
 
   const handleSelectAll = (event) => {
+    if (!onRowSelect) return;
+
     if (event.target.checked) {
       const newSelected = data.map(row => rowKey(row));
-      setSelected(newSelected);
-      if (onRowSelect) onRowSelect(data);
+      const selectedData = data;
+      onRowSelect(selectedData, newSelected);
     } else {
-      setSelected([]);
-      if (onRowSelect) onRowSelect([]);
+      onRowSelect([], []);
     }
   };
 
   const handleSelectRow = (row) => {
+    if (!onRowSelect) return;
+
     const key = rowKey(row);
-    const selectedIndex = selected.indexOf(key);
+    const selectedIndex = selectedRows.indexOf(key);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = [...selected, key];
+      newSelected = [...selectedRows, key];
     } else {
-      newSelected = selected.filter(id => id !== key);
+      newSelected = selectedRows.filter(id => id !== key);
     }
 
-    setSelected(newSelected);
-    if (onRowSelect) {
-      const selectedRows = data.filter(row => newSelected.includes(rowKey(row)));
-      onRowSelect(selectedRows);
-    }
+    const selectedData = data.filter(row => newSelected.includes(rowKey(row)));
+    onRowSelect(selectedData, newSelected);
   };
 
   const handleSort = (col) => {
-    if (!col.sortable) return;
+    if (!col.sortable || !onSortChange) return;
     const colKey = typeof col.field === 'string' ? col.field : col.label;
     const isAsc = sortColumn === colKey && sortDirection === 'asc';
     const newDirection = isAsc ? 'desc' : 'asc';
-    setSortColumn(colKey);
-    setSortDirection(newDirection);
-    if (onSortChange) onSortChange(colKey, newDirection);
+    onSortChange(colKey, newDirection);
   };
 
   const renderCell = (col, row) => {
@@ -80,10 +77,6 @@ function SmartTable({
     }
     return row[col.field];
   };
-
-  useEffect(() => {
-    if (!selectable) setSelected([]);
-  }, [data]);
 
   return (
     <Paper elevation={3} sx={{ width: '100%', overflowX: 'auto' }}>
@@ -95,30 +88,33 @@ function SmartTable({
               {selectable && (
                 <TableCell padding="checkbox">
                   <Checkbox
-                    checked={selected.length === data.length && data.length > 0}
+                    checked={selectedRows.length === data.length && data.length > 0}
                     onChange={handleSelectAll}
                     disabled={loading || data.length === 0}
                   />
                 </TableCell>
               )}
-              {columns.map((col, index) => (
-                <TableCell
-                  key={index}
-                  align={col.align || 'left'}
-                  sortDirection={sortColumn === (typeof col.field === 'string' ? col.field : col.label) ? sortDirection : false}
-                  onClick={() => handleSort(col)}
-                  sx={{
-                    cursor: col.sortable ? 'pointer' : 'default',
-                    userSelect: 'none',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {col.label}
-                  {col.sortable && sortColumn === (typeof col.field === 'string' ? col.field : col.label) && (
-                    sortDirection === 'asc' ? ' 🔼' : ' 🔽'
-                  )}
-                </TableCell>
-              ))}
+              {columns.map((col, index) => {
+                const colKey = typeof col.field === 'string' ? col.field : col.label;
+                return (
+                  <TableCell
+                    key={index}
+                    align={col.align || 'left'}
+                    sortDirection={sortColumn === colKey ? sortDirection : false}
+                    onClick={() => handleSort(col)}
+                    sx={{
+                      cursor: col.sortable ? 'pointer' : 'default',
+                      userSelect: 'none',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {col.label}
+                    {col.sortable && sortColumn === colKey && (
+                      sortDirection === 'asc' ? ' 🔼' : ' 🔽'
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           </TableHead>
           <TableBody>
