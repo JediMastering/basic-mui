@@ -12,28 +12,12 @@ import {
   Skeleton,
   Box,
   Typography,
-  Button,
 } from '@mui/material';
 
 import { requestBackend } from '../../utils/connections';
-
-// Mock de dados interno
-const mockSpringResponse = {
-  content: [
-    { id: '1', nome: 'João Silva', email: 'joao@email.com', idade: 30 },
-    { id: '2', nome: 'Maria Oliveira', email: 'maria@email.com', idade: 25 },
-    { id: '3', nome: 'Carlos Souza', email: 'carlos@email.com', idade: 28 },
-  ],
-  totalElements: 50,
-  totalPages: 10,
-  size: 5,
-  number: 0,
-  sort: {},
-  first: true,
-  last: false,
-  numberOfElements: 3,
-  empty: false,
-};
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Text from '../../../framework/components/fields/Text';
 
 function SmartTable({
   data: externalData,
@@ -41,7 +25,7 @@ function SmartTable({
   url,
   rowKey,
   page: externalPage,
-  pageSize: externalPageSize,
+  externalPageSize,
   total: externalTotal,
   onPageChange: externalOnPageChange,
   onRowSelect,
@@ -53,36 +37,32 @@ function SmartTable({
   loading: externalLoading = false,
   emptyMessage = 'Nenhum dado encontrado',
   actions,
-  useMock = false,
 }) {
   // Estados internos
   const [pageData, setPageData] = useState(
-    useMock
-      ? mockSpringResponse
-      : { content: externalData || [], number: externalPage || 0, size: externalPageSize || 50, totalElements: externalTotal || 0 }
+    { content: externalData || [], number: externalPage || 0, size: externalPageSize || 10, totalElements: externalTotal || 0 }
   );
-  const [page, setPage] = useState(useMock ? mockSpringResponse.number : externalPage || 0);
-  const [pageSize] = useState(useMock ? mockSpringResponse.size : externalPageSize || 50);
-  const [sortColumn, setSortColumn] = useState(useMock ? null : externalSortColumn || null);
-  const [sortDirection, setSortDirection] = useState(useMock ? 'asc' : externalSortDirection);
+  const [page, setPage] = useState(externalPage || 0);
+  const [pageSize] = useState(externalPageSize || 50);
+  const [sortColumn, setSortColumn] = useState(externalSortColumn || null);
+  const [sortDirection, setSortDirection] = useState(externalSortDirection);
   const [loading, setLoading] = useState(externalLoading);
 
   const getData = async (url) => {
-    onRowSelect([], [])
+    onRowSelect([], []);
     return await requestBackend(url);
   };
 
   // Dados a serem exibidos
-  const data = useMock ? pageData.content : externalData || pageData.content || [];
-  const total = useMock ? pageData.totalElements : externalTotal || pageData.totalElements || 0;
+  const data = externalData || pageData.content || [];
+  const total = externalTotal || pageData.totalElements || 0;
 
   // Função para buscar dados
   const fetchData = async (pageNum, sortCol, sortDir) => {
-    if (useMock || !url) return;
+    if (!url) return;
 
     setLoading(true);
     try {
-      // Construir a URL com parâmetros de paginação e ordenação
       const params = new URLSearchParams({
         page: pageNum,
         size: pageSize,
@@ -107,10 +87,10 @@ function SmartTable({
 
   // Buscar dados na montagem inicial e quando page, sortColumn ou sortDirection mudarem
   useEffect(() => {
-    if (!useMock && url && !externalData) {
+    if (url && !externalData) {
       fetchData(page, sortColumn, sortDirection);
     }
-  }, [page, sortColumn, sortDirection, url, useMock, externalData, pageSize]);
+  }, [page, sortColumn, sortDirection, url, externalData, pageSize]);
 
   const isSelected = (row) => selectedRows.includes(rowKey(row));
 
@@ -145,7 +125,7 @@ function SmartTable({
 
   const handleSort = (col) => {
     if (!col.sortable) return;
-    const colKey = typeof col.field === 'string' ? col.field : col.label;
+    const colKey = typeof col.field === 'string' ? col.field : col.columnName;
     const isAsc = sortColumn === colKey && sortDirection === 'asc';
     const newDirection = isAsc ? 'desc' : 'asc';
 
@@ -154,18 +134,11 @@ function SmartTable({
 
     if (externalOnSortChange) {
       externalOnSortChange(colKey, newDirection);
-    } else if (useMock) {
-      console.log(`Ordenado por ${colKey} em ordem ${newDirection}`);
-      // Aqui você pode adicionar lógica para reordenar o mock, se necessário
     }
   };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
-    if (useMock) {
-      setPageData({ ...mockSpringResponse, number: newPage });
-      console.log('Nova página requisitada:', newPage);
-    }
     if (externalOnPageChange) {
       externalOnPageChange(newPage);
     }
@@ -175,14 +148,14 @@ function SmartTable({
     if (typeof col.field === 'function') {
       return col.field(row);
     }
-    return row[col.field];
+    return <Text value={row[col.field]} />;
   };
 
   return (
-    <Paper elevation={3} sx={{ width: '100%', overflowX: 'auto' }}>
+    <Paper elevation={3} sx={{ width: '100%' }}>
       {actions && <Box p={2}>{actions}</Box>}
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ maxHeight: '60vh', overflowY: 'auto' }}>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               {selectable && (
@@ -195,7 +168,7 @@ function SmartTable({
                 </TableCell>
               )}
               {columns.map((col, index) => {
-                const colKey = typeof col.field === 'string' ? col.field : col.label;
+                const colKey = typeof col.field === 'string' ? col.field : col.columnName;
                 return (
                   <TableCell
                     key={index}
@@ -206,10 +179,19 @@ function SmartTable({
                       cursor: col.sortable ? 'pointer' : 'default',
                       userSelect: 'none',
                       fontWeight: 'bold',
+                      backgroundColor: 'background.paper',
                     }}
                   >
-                    {col.label}
-                    {col.sortable && sortColumn === colKey && (sortDirection === 'asc' ? ' 🔼' : ' 🔽')}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      {col.sortable && sortColumn === colKey && (
+                        sortDirection === 'asc' ? (
+                          <KeyboardArrowUp sx={{ fontSize: '16px', padding: 0 }} />
+                        ) : (
+                          <KeyboardArrowDown sx={{ fontSize: '16px', padding: 0 }} />
+                        )
+                      )}
+                      {col.label}
+                    </Box>
                   </TableCell>
                 );
               })}
@@ -217,7 +199,7 @@ function SmartTable({
           </TableHead>
           <TableBody>
             {loading ? (
-              Array.from({ length: pageSize }).map((_, i) => (
+              Array.from({ length: 10 }).map((_, i) => (
                 <TableRow key={i}>
                   {selectable && (
                     <TableCell padding="checkbox">
@@ -248,7 +230,7 @@ function SmartTable({
                     </TableCell>
                   )}
                   {columns.map((col, i) => (
-                    <TableCell key={i} align={col.align || 'left'}>
+                    <TableCell key={i} align={col.align || 'left'} style={{padding:0}}>
                       {renderCell(col, row)}
                     </TableCell>
                   ))}
