@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
+import { requestBackend } from '../framework/utils/connections';
 
 function createData(id, name, login) {
     return {
@@ -28,21 +29,11 @@ function createData(id, name, login) {
     };
 }
 
-const rows = [
-    createData(1, 'Cupcake', '305'),
-    createData(2, 'Donut', '452'),
-    createData(3, 'Eclair', '262'),
-    createData(4, 'Frozen yoghurt', '159'),
-    createData(5, 'Gingerbread', '356'),
-    createData(6, 'Honeycomb', '408'),
-    createData(7, 'Ice cream sandwich', '237'),
-    createData(8, 'Jelly Bean', '375'),
-    createData(9, 'KitKat', '518'),
-    createData(10, 'Lollipop', '392'),
-    createData(11, 'Marshmallow', '318'),
-    createData(12, 'Nougat', '360'),
-    createData(13, 'Oreo', '437'),
-];
+const getData = async () => {
+    const data = await requestBackend('api/users');
+
+    return data;
+};
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -68,7 +59,7 @@ const headCells = [
         label: 'Nome',
     },
     {
-        id: 'login',
+        id: 'email',
         numeric: false,
         disablePadding: true,
         label: 'Login',
@@ -188,10 +179,25 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable() {
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('calories');
+    const [orderBy, setOrderBy] = React.useState('name');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(100);
+    const [rows, setRows] = React.useState([])
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getData();
+                setRows(data.content);
+            } catch (e) {
+                console.log(e)
+            }
+        }
+        debugger;
+        fetchData();
+    },[]);
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -245,7 +251,7 @@ export default function EnhancedTable() {
             [...rows]
                 .sort(getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
-        [order, orderBy, page, rowsPerPage],
+        [order, orderBy, page, rowsPerPage, rows],
     );
 
     return (
@@ -299,7 +305,7 @@ export default function EnhancedTable() {
                                         >
                                             {row.name}
                                         </TableCell>
-                                        <TableCell align="left">{row.login}</TableCell>
+                                        <TableCell align="left">{row.email}</TableCell>
                                     </TableRow>
                                 );
                             })}

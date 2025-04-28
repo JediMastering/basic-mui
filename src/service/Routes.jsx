@@ -6,7 +6,7 @@ import System from "../layout/System";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
-import TableExample from "../pages/TableExample";
+import TableExample from "../pages/SmartTableExample";
 import Test from "../pages/Test";
 
 const routes = [

@@ -4,15 +4,16 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const url = "";
+  const url = "http://localhost:8080/login";
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    localStorage.setItem("authToken", "teste");
+
+    localStorage.setItem("authToken", "token");
     navigate("home");
     return;
 
@@ -21,7 +22,7 @@ const Login = () => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ username, password })
     })
 
     if (response.ok) {
@@ -51,8 +52,8 @@ const Login = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             label="Senha"
