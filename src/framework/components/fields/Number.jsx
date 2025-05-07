@@ -1,46 +1,78 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Text from './Text';
 
-//AJUSTAR AQUI!!!
-const getNumber = (str, defaultValue = "0", decimalPlaces = 2) => {
-    let defaultReturn, strValeu;
-    strValeu = `${str}`;
-
-    try {
-        defaultReturn = Number(number.toFixed(decimalPlaces));
-    } catch (e) {
-        defaultReturn = "";
+const getNumber = (input, defaultValue = 0, decimalPlaces = 2, useThousandSeparator = true) => {
+    // Handle null/undefined inputs
+    if (input == null) {
+        return Number(defaultValue.toFixed(decimalPlaces)).toLocaleString('pt-BR', {
+            minimumFractionDigits: decimalPlaces,
+            maximumFractionDigits: decimalPlaces,
+            useGrouping: useThousandSeparator
+        });
     }
 
     try {
-        // Check if input is valid
-        if (!strValeu) {
-            return defaultReturn;
+        // If input is already a number and valid, format it
+        if (typeof input === 'number' && !isNaN(input)) {
+            return input.toLocaleString('pt-BR', {
+                minimumFractionDigits: decimalPlaces,
+                maximumFractionDigits: decimalPlaces,
+                useGrouping: useThousandSeparator
+            });
         }
 
-        // Remove any whitespace and normalize separators
-        let cleanedStr = strValeu.trim()
-            .replace(/\./g, '') // Remove thousand separators
-            .replace(',', '.'); // Convert decimal separator to dot
+        // Convert input to string for processing
+        const strValue = String(input).trim();
+
+        // Check if input is empty
+        if (!strValue) {
+            return Number(defaultValue.toFixed(decimalPlaces)).toLocaleString('pt-BR', {
+                minimumFractionDigits: decimalPlaces,
+                maximumFractionDigits: decimalPlaces,
+                useGrouping: useThousandSeparator
+            });
+        }
+
+        // Clean and normalize string input
+        let cleanedStr = strValue
+            .replace(/[^\d.,-]/g, '') // Remove non-numeric characters except dot, comma, minus
+            .replace(/\.(?=.*\.)/g, '') // Remove extra dots
+            .replace(',', '.'); // Convert comma to dot
 
         // Parse to number
         const number = parseFloat(cleanedStr);
 
-        // Check if parsing resulted in a valid number
-        if (isNaN(number)) {
-            return defaultReturn;
-        }
-
-        // Return formatted number with specified decimal places
-        return Number(number.toFixed(decimalPlaces));
+        // Return formatted number or default if invalid
+        return isNaN(number)
+            ? Number(defaultValue.toFixed(decimalPlaces)).toLocaleString('pt-BR', {
+                  minimumFractionDigits: decimalPlaces,
+                  maximumFractionDigits: decimalPlaces,
+                  useGrouping: useThousandSeparator
+              })
+            : number.toLocaleString('pt-BR', {
+                  minimumFractionDigits: decimalPlaces,
+                  maximumFractionDigits: decimalPlaces,
+                  useGrouping: useThousandSeparator
+              });
     } catch (error) {
-        return defaultReturn;
+        return Number(defaultValue.toFixed(decimalPlaces)).toLocaleString('pt-BR', {
+            minimumFractionDigits: decimalPlaces,
+            maximumFractionDigits: decimalPlaces,
+            useGrouping: useThousandSeparator
+        });
     }
-}
+};
 
-const Number = ({ value }) => {
-    const number = getNumber(value);
-    < Text value={number} />
-}
+const Number = ({ value, decimalPlaces, defaultValue }) => {
+    const formattedNumber = getNumber(value, defaultValue, decimalPlaces);
+    return <Text value={formattedNumber} />;
+};
+
+Number.propTypes = {
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    decimalPlaces: PropTypes.number,
+    defaultValue: PropTypes.number
+};
 
 export default Number;
