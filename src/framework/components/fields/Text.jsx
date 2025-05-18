@@ -3,9 +3,9 @@ import { Typography } from '@mui/material';
 
 const Text = ({ value }) => (
     <Typography
-        align="center"
+        align="left"
         color="text.secondary"
-        sx={{ fontSize:'12px', padding: 0 }}
+        sx={{ fontSize:'12px', padding: 0, paddingLeft:'18px' }}
     >
         {value}
     </Typography>
