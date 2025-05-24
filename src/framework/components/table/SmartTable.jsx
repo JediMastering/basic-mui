@@ -223,7 +223,7 @@ function SmartTable({
               </TableRow>
             ) : (
               data.map((row) => (
-                <TableRow key={rowKey(row)} hover selected={isSelected(row)}>
+                <TableRow key={rowKey(row)} hover selected={isSelected(row)} onClick={()=> handleSelectRow(row)}>
                   {selectable && (
                     <TableCell padding="checkbox">
                       <Checkbox checked={isSelected(row)} onChange={() => handleSelectRow(row)} />

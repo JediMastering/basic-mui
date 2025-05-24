@@ -7,12 +7,11 @@ import {
   Button,
   TextField,
   MenuItem,
-  CircularProgress
+  CircularProgress,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
 import { requestBackend } from "../../utils/connections";
 
 // Gera schema Yup a partir do JSON
@@ -22,9 +21,7 @@ const generateYupSchema = (schema) => {
     let validator;
     switch (field.type) {
       case "number":
-        validator = yup
-          .number()
-          .typeError("Deve ser um número");
+        validator = yup.number().typeError("Deve ser um número");
         if (field.min != null)
           validator = validator.min(field.min, `Mínimo ${field.min}`);
         if (field.max != null)
@@ -60,23 +57,27 @@ const GenericFormModal = ({
   title,
   formSchema,
   submitUrl,
-  method = "POST",
+  method: propMethod = "POST", // Método padrão é POST
   initialValues = {},
-  onSuccess
+  onSuccess,
 }) => {
   const [loading, setLoading] = useState(false);
   const validationSchema = useMemo(() => generateYupSchema(formSchema), [formSchema]);
+
+  // Determina se é um update (se initialValues tem id) e ajusta a URL e o método
+  const isUpdate = !!initialValues.id; // Verifica se existe um ID
+  const effectiveMethod = isUpdate ? "PUT" : propMethod; // Usa PUT para update, senão usa o método da prop
+  const effectiveUrl = isUpdate ? `${submitUrl}/${initialValues.id}` : submitUrl; // Adiciona o ID à URL para update
 
   const {
     control,
     handleSubmit,
     reset,
     setError,
-    watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm({
     defaultValues: initialValues,
-    resolver: yupResolver(validationSchema)
+    resolver: yupResolver(validationSchema),
   });
 
   const onSubmit = async (data) => {
@@ -98,19 +99,7 @@ const GenericFormModal = ({
         payload = data;
       }
 
-      const urlTeste = 'api/users';
-      await requestBackend(
-        urlTeste,
-        'POST',
-        data
-      );
-
-      await axios({
-        method,
-        url: submitUrl,
-        data: payload,
-        headers: hasFile ? { "Content-Type": "multipart/form-data" } : undefined
-      });
+      await requestBackend(effectiveUrl, effectiveMethod, data);
 
       onSuccess?.();
       onClose();
@@ -131,7 +120,7 @@ const GenericFormModal = ({
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{title || "Formulário"}</DialogTitle>
+      <DialogTitle>{title || (isUpdate ? "Editar Registro" : "Novo Registro")}</DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <DialogContent>
           {formSchema.map((field) => (
@@ -165,7 +154,7 @@ const GenericFormModal = ({
                   label: field.label,
                   error: !!errors[field.name],
                   helperText: errors[field.name]?.message,
-                  ...field.props
+                  ...field.props,
                 };
 
                 switch (field.type) {
@@ -184,16 +173,18 @@ const GenericFormModal = ({
                   case "date":
                     return <TextField {...commonProps} type="date" InputLabelProps={{ shrink: true }} />;
                   default:
-                    return <TextField value={'teste'} {...commonProps} type={field.type || "text"} />;
+                    return <TextField {...commonProps} type={field.type || "text"} />;
                 }
               }}
             />
           ))}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} disabled={loading}>Cancelar</Button>
+          <Button onClick={onClose} disabled={loading}>
+            Cancelar
+          </Button>
           <Button type="submit" variant="contained" disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : "Salvar"}
+            {loading ? <CircularProgress size={24} /> : isUpdate ? "Atualizar" : "Salvar"}
           </Button>
         </DialogActions>
       </form>
