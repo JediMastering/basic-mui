@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Text from '../../../framework/components/fields/Text';
 
-function SmartTable({
+const SmartTable = forwardRef(({
   data: externalData,
   columns,
   url,
@@ -37,7 +37,7 @@ function SmartTable({
   loading: externalLoading = false,
   emptyMessage = 'Nenhum dado encontrado',
   actions,
-}) {
+}, ref) => {
   // Estados internos
   const [pageData, setPageData] = useState(
     { content: externalData || [], number: externalPage || 0, size: externalPageSize || 10, totalElements: externalTotal || 0 }
@@ -151,6 +151,13 @@ function SmartTable({
     return <Text value={row[col.field]} />;
   };
 
+  // Expondo o método de recarga para o componente pai
+  useImperativeHandle(ref, () => ({
+    reload: () => {
+      fetchData(page, sortColumn, sortDirection);
+    }
+  }));
+
   return (
     <Paper elevation={3} sx={{ width: '100%' }}>
       {actions && <Box p={2}>{actions}</Box>}
@@ -250,6 +257,6 @@ function SmartTable({
       />
     </Paper>
   );
-}
+});
 
 export default SmartTable;

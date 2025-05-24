@@ -19,6 +19,11 @@ export async function requestBackend(url, method = 'GET', body = null, headers =
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || `Erro ${response.status}: ${response.statusText}`);
       }
+
+      // Para métodos DELETE, não tentamos ler o corpo da resposta
+      if (method === 'DELETE') {
+        return { success: true };
+      }
   
       return await response.json();
     } catch (error) {
