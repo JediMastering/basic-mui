@@ -114,25 +114,7 @@ function SmartTableExample() {
       label: 'Status 3ª',
       field: 'email',
       sortable: true,
-    },
-    {
-      label: 'Ações',
-      field: (row) => (
-        <>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => handleOpenModal(row)}
-          >
-            Ver
-          </Button>
-          <Button variant="outlined" size="small">
-            Excluir
-          </Button>
-        </>
-      ),
-      align: 'center',
-    },
+    }
   ];
 
   return (
