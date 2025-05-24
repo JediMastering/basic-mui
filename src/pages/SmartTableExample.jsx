@@ -12,6 +12,7 @@ import {
   DialogActions,
   TextField
 } from '@mui/material';
+import { useForm, Controller } from "react-hook-form";
 import Number from '../framework/components/fields/Number';
 import SmartGenericFormModal from '../framework/components/form/SmartGenericFormModal';
 import { requestBackend } from '../framework/utils/connections';
@@ -24,11 +25,9 @@ function SmartTableExample() {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [confirmDialog, setConfirmDialog] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [editFormData, setEditFormData] = useState({
-    name: '',
-    email: ''
-  });
   const tableRef = useRef();
+  
+  const { control, handleSubmit, reset } = useForm();
 
   const handleRowSelect = (rows, ids) => {
     setSelectedRows(rows);
@@ -54,9 +53,8 @@ function SmartTableExample() {
   };
 
   const handleOpenEditModal = () => {
-    // Como sabemos que só tem um item selecionado, pegamos o primeiro
     const selectedRow = selectedRows[0];
-    setEditFormData({
+    reset({
       name: selectedRow.name,
       email: selectedRow.email
     });
@@ -65,24 +63,16 @@ function SmartTableExample() {
 
   const handleCloseEditModal = () => {
     setEditModalOpen(false);
-    setEditFormData({
+    reset({
       name: '',
       email: ''
     });
   };
 
-  const handleEditFormChange = (event) => {
-    const { name, value } = event.target;
-    setEditFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleEditSubmit = async () => {
+  const onEditSubmit = async (data) => {
     try {
       const selectedRow = selectedRows[0];
-      await requestBackend(`api/users/${selectedRow.id}`, 'PUT', editFormData);
+      await requestBackend(`api/users/${selectedRow.id}`, 'PUT', data);
       
       setSnackbar({
         open: true,
@@ -90,14 +80,10 @@ function SmartTableExample() {
         severity: 'success'
       });
       
-      // Fecha o modal
       handleCloseEditModal();
-      
-      // Limpa seleção
       setSelectedRows([]);
       setSelectedIds([]);
       
-      // Recarrega a tabela
       if (tableRef.current) {
         tableRef.current.reload();
       }
@@ -138,12 +124,10 @@ function SmartTableExample() {
           severity: 'success'
         });
         
-        // Limpa seleção
         setSelectedRows([]);
         setSelectedIds([]);
       }
       
-      // Recarrega a tabela em qualquer caso
       if (tableRef.current) {
         tableRef.current.reload();
       }
@@ -160,7 +144,6 @@ function SmartTableExample() {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  // Definição das colunas dentro do componente para acessar handleOpenModal
   const columns = [
     {
       label: 'Identificador',
@@ -238,7 +221,6 @@ function SmartTableExample() {
         </Alert>
       </Snackbar>
 
-      {/* Dialog de Confirmação de Exclusão */}
       <Dialog
         open={confirmDialog}
         onClose={handleCloseConfirmDialog}
@@ -263,7 +245,6 @@ function SmartTableExample() {
         </DialogActions>
       </Dialog>
 
-      {/* Modal de Edição */}
       <Dialog
         open={editModalOpen}
         onClose={handleCloseEditModal}
@@ -274,32 +255,44 @@ function SmartTableExample() {
         <DialogTitle id="edit-dialog-title">
           Editar Registro
         </DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
-            <TextField
-              name="name"
-              label="ATP"
-              fullWidth
-              value={editFormData.name}
-              onChange={handleEditFormChange}
-            />
-            <TextField
-              name="email"
-              label="Status 3ª"
-              fullWidth
-              value={editFormData.email}
-              onChange={handleEditFormChange}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEditModal}>
-            Cancelar
-          </Button>
-          <Button onClick={handleEditSubmit} variant="contained" color="primary">
-            Salvar
-          </Button>
-        </DialogActions>
+        <form onSubmit={handleSubmit(onEditSubmit)}>
+          <DialogContent>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
+              <Controller
+                name="name"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="ATP"
+                    fullWidth
+                  />
+                )}
+              />
+              <Controller
+                name="email"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    label="Status 3ª"
+                    fullWidth
+                  />
+                )}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseEditModal}>
+              Cancelar
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Salvar
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </>
   );
