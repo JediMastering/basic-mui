@@ -2,20 +2,19 @@ import React from "react";
 import Home from "../components/Home";
 import Login from "../pages/Login";
 import NotFound from "../components/NotFound";
-import System from "../layout/System";
 import Settings from "../pages/Settings";
 import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
-import TableExample from "../pages/SmartTableExample";
+import UsersPage from "../pages/users/UsersPage";
 import Test from "../pages/Test";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
-  { path: "/home", element: <System><Home /></System>, isProtected: true },
-  { path: "/dashboard", element: <System><Dashboard /></System>, isProtected: true },
-  { path: "/settings", element: <System><Settings /></System>, isProtected: true },
-  { path: "/profile", element: <System><Profile /></System>, isProtected: true },
-  { path: "/table", element: <System><TableExample /></System>, isProtected: true },
+  { path: "/home", element: <Home />, isProtected: true },
+  { path: "/dashboard", element: <Dashboard />, isProtected: true },
+  { path: "/settings", element: <Settings />, isProtected: true },
+  { path: "/profile", element: <Profile />, isProtected: true },
+  { path: "/table", element: <UsersPage />, isProtected: true },
   { path: "/test", element: <Test />, isProtected: false },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
