@@ -5,6 +5,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { ptBR } from "@mui/material/locale";
 import CssBaseline from "@mui/material/CssBaseline";
+import MainLayout from './framework/layouts/MainLayout';
+import UsersPage from './pages/users/UsersPage';
 
 import ProtectedRoute from "./service/ProtectedRoute";
 import routes from "./service/Routes";
@@ -17,23 +19,9 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
         <CssBaseline />
-        <Router>
-          <Routes>
-            {routes.map(({ path, element, isProtected }, index) => (
-              <Route
-                key={index}
-                path={path}
-                element={
-                  isProtected ? (
-                    <ProtectedRoute>{element}</ProtectedRoute>
-                  ) : (
-                    element
-                  )
-                }
-              />
-            ))}
-          </Routes>
-        </Router>
+        <MainLayout>
+          <UsersPage />
+        </MainLayout>
       </LocalizationProvider>
     </ThemeProvider>
   );
