@@ -116,7 +116,8 @@ const FilterSidebar = ({
           display: 'flex',
           position: 'relative',
           minHeight: '100%',
-          alignItems: 'flex-start'
+          alignItems: 'flex-start',
+          width: open ? drawerWidth : '40px'  // Ajusta dinamicamente baseado no estado do drawer
         }}
       >
         {!open && (
@@ -136,6 +137,10 @@ const FilterSidebar = ({
               width: 40,
               minHeight: 48,
               cursor: 'pointer',
+              transition: 'background-color 0.2s',
+              '&:hover': {
+                bgcolor: 'action.hover'
+              }
             }}
             onClick={handleDrawerToggle}
           >
@@ -143,8 +148,23 @@ const FilterSidebar = ({
               color="primary"
               variant="dot"
               invisible={!hasActiveFilters}
+              sx={{
+                '& .MuiBadge-badge': {
+                  top: 4,
+                  right: 4,
+                  width: 8,
+                  height: 8,
+                  minWidth: 8
+                }
+              }}
             >
-              <FilterListIcon color="primary" />
+              <FilterListIcon 
+                color="primary" 
+                sx={{ 
+                  fontSize: 20,
+                  opacity: 0.8
+                }}
+              />
             </Badge>
           </Paper>
         )}
