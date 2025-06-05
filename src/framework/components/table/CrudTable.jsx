@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import { 
   Box, 
   Button,
@@ -10,7 +10,7 @@ import DeleteConfirmationDialog from '../dialogs/DeleteConfirmationDialog';
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { requestBackend } from '../../utils/connections';
 
-const CrudTable = ({
+const CrudTable = forwardRef(({
   columns,
   url,
   title,
@@ -18,7 +18,7 @@ const CrudTable = ({
   CreateForm = EditForm,
   rowKey = row => row.id,
   pageSize = 50,
-}) => {
+}, ref) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -26,6 +26,17 @@ const CrudTable = ({
   const [confirmDialog, setConfirmDialog] = useState(false);
   const tableRef = useRef();
   const { snackbar, showSnackbar } = useSnackbar();
+  const [currentUrl, setCurrentUrl] = useState(url);
+
+  // Expõe o método reload para o componente pai
+  useImperativeHandle(ref, () => ({
+    reload: (newUrl) => {
+      if (newUrl) {
+        setCurrentUrl(newUrl);
+      }
+      tableRef.current?.reload();
+    }
+  }));
 
   const handleRowSelect = (rows, ids) => {
     setSelectedRows(rows);
@@ -132,7 +143,7 @@ const CrudTable = ({
         <SmartTable
           ref={tableRef}
           columns={columns}
-          url={url}
+          url={currentUrl}
           rowKey={rowKey}
           externalPageSize={pageSize}
           onRowSelect={handleRowSelect}
@@ -180,6 +191,6 @@ const CrudTable = ({
       </Snackbar>
     </>
   );
-};
+});
 
 export default CrudTable; 
