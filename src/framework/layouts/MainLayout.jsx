@@ -11,8 +11,9 @@ const MainLayout = ({ children }) => {
         bgcolor: 'background.default'
       }}
     >
+      aqui1
       <NavigationSidebar />
-      
+      aqui2
       <Box
         component="main"
         sx={{
@@ -23,8 +24,11 @@ const MainLayout = ({ children }) => {
           overflow: 'auto'
         }}
       >
+        aqui3
         {children}
+        aqui 4
       </Box>
+      aqui 5
     </Box>
   );
 };

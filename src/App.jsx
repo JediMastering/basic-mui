@@ -10,6 +10,8 @@ import UsersPage from './pages/users/UsersPage';
 
 import ProtectedRoute from "./service/ProtectedRoute";
 import routes from "./service/Routes";
+import TestLayout from "./framework/layouts/TestLayout";
+import TestLayoutPage from "./pages/TestLayoutPage";
 
 // Cria o tema com suporte ao idioma português
 const theme = createTheme({}, ptBR);
@@ -19,9 +21,9 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
         <CssBaseline />
-        <MainLayout>
-          <UsersPage />
-        </MainLayout>
+        <TestLayout>
+          <TestLayoutPage />
+        </TestLayout>
       </LocalizationProvider>
     </ThemeProvider>
   );
