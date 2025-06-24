@@ -3,12 +3,12 @@ import { Box } from '@mui/material';
 import PropTypes from 'prop-types';
 
 /**
- * MainLayout - Main layout component that provides the basic structure
+ * ApplicationLayout - Main application layout component
  * 
  * This component follows the Single Responsibility Principle by only handling
- * the basic layout structure and delegating specific areas to child components.
+ * the basic layout structure with header and content areas.
  */
-const MainLayout = ({ children, header, sidebar, mainContent }) => {
+const ApplicationLayout = ({ children, header, sidebar, mainContent }) => {
   return (
     <Box
       sx={{
@@ -20,7 +20,7 @@ const MainLayout = ({ children, header, sidebar, mainContent }) => {
         backgroundColor: 'background.default',
       }}
     >
-      {/* Header Section */}
+      {/* Fixed Header */}
       {header && (
         <Box
           sx={{
@@ -29,12 +29,12 @@ const MainLayout = ({ children, header, sidebar, mainContent }) => {
             left: 0,
             width: '100vw',
             height: '64px',
-            zIndex: 1200,
             backgroundColor: 'primary.main',
             color: 'primary.contrastText',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            zIndex: 1200,
             boxShadow: 2,
           }}
         >
@@ -52,7 +52,7 @@ const MainLayout = ({ children, header, sidebar, mainContent }) => {
           width: '100vw',
         }}
       >
-        {/* Sidebar Section */}
+        {/* Sidebar */}
         {sidebar && (
           <Box
             sx={{
@@ -70,7 +70,7 @@ const MainLayout = ({ children, header, sidebar, mainContent }) => {
           </Box>
         )}
 
-        {/* Main Content Section */}
+        {/* Main Content */}
         <Box
           sx={{
             flex: 1,
@@ -88,11 +88,11 @@ const MainLayout = ({ children, header, sidebar, mainContent }) => {
   );
 };
 
-MainLayout.propTypes = {
+ApplicationLayout.propTypes = {
   children: PropTypes.node,
   header: PropTypes.node,
   sidebar: PropTypes.node,
   mainContent: PropTypes.node,
 };
 
-export default MainLayout; 
+export default ApplicationLayout; 

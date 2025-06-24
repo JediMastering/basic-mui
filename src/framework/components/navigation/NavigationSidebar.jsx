@@ -1,212 +1,107 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Drawer,
-  IconButton,
-  Box,
-  Typography,
-  TextField,
-  InputAdornment,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-  CircularProgress,
-  Backdrop,
-  alpha
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
-import { fetchUserMenus } from '../../../services/menuService';
+import React from 'react';
+import { Box, Typography, List, ListItemButton, ListItemText, ListItemIcon, Divider } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import PeopleIcon from '@mui/icons-material/People';
+import SettingsIcon from '@mui/icons-material/Settings';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PropTypes from 'prop-types';
 
-const NavigationSidebar = () => {
-  const [open, setOpen] = useState(false);
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredItems, setFilteredItems] = useState([]);
+/**
+ * NavigationSidebar - Sidebar component for navigation
+ * 
+ * This component follows the Single Responsibility Principle by only handling
+ * navigation-related functionality.
+ */
+const NavigationSidebar = ({ navigationItems = [], title = 'Navigation' }) => {
+  // Default navigation items if none provided
+  const defaultItems = [
+    { label: 'Home', icon: <HomeIcon />, path: '/home' },
+    { label: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+    { label: 'Users', icon: <PeopleIcon />, path: '/table' },
+    { label: 'Settings', icon: <SettingsIcon />, path: '/settings' },
+    { label: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
+  ];
 
-  const loadMenuItems = async () => {
-    setLoading(true);
-    try {
-      const items = await fetchUserMenus();
-      setMenuItems(items);
-      setFilteredItems(items);
-    } catch (error) {
-      console.error('Erro ao carregar menus:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (open) {
-      loadMenuItems();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    const filtered = menuItems.filter(item =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredItems(filtered);
-  }, [searchTerm, menuItems]);
-
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const toggleDrawer = () => {
-    if (!open) {
-      setMenuItems([]); // Limpa os itens ao abrir para forçar nova requisição
-      setSearchTerm('');
-    }
-    setOpen(!open);
-  };
+  const items = navigationItems.length > 0 ? navigationItems : defaultItems;
 
   return (
-    <>
-      <IconButton
-        onClick={toggleDrawer}
+    <Box sx={{ p: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Sidebar Header */}
+      <Typography
+        variant="h6"
         sx={{
-          position: 'fixed',
-          zIndex:'99',
-          left: 16,
-          top: 16,
-          bgcolor: 'background.paper',
-          boxShadow: 2,
-          '&:hover': {
-            bgcolor: 'background.paper',
-          }
+          mb: 2,
+          color: 'text.primary',
+          fontWeight: 600,
+          textAlign: 'center',
         }}
       >
-        <MenuIcon />
-      </IconButton>
+        {title}
+      </Typography>
 
-      <Drawer
-        anchor="left"
-        open={open}
-        onClose={toggleDrawer}
-        variant="temporary"
-        PaperProps={{
-          sx: {
-            width: 280,
-            bgcolor: 'background.paper',
-            backgroundImage: 'none',
-          }
-        }}
-      >
-        <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-          {/* Header */}
-          <Box
+      <Divider sx={{ mb: 2 }} />
+
+      {/* Navigation List */}
+      <List sx={{ flex: 1 }}>
+        {items.map((item, index) => (
+          <ListItemButton
+            key={index}
+            onClick={item.onClick}
             sx={{
-              p: 2,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: 1,
-              borderColor: 'divider'
+              mb: 1,
+              borderRadius: 1,
+              '&:hover': {
+                backgroundColor: 'action.hover',
+              },
             }}
           >
-            <Typography variant="h6" component="div">
-              Menu
-            </Typography>
-            <IconButton onClick={toggleDrawer} size="small">
-              <CloseIcon />
-            </IconButton>
-          </Box>
-
-          {/* Search */}
-          <Box sx={{ p: 2 }}>
-            <TextField
-              fullWidth
-              size="small"
-              placeholder="Buscar menu..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon fontSize="small" />
-                  </InputAdornment>
-                ),
+            {item.icon && (
+              <ListItemIcon sx={{ color: 'text.primary', minWidth: 40 }}>
+                {item.icon}
+              </ListItemIcon>
+            )}
+            <ListItemText
+              primary={item.label}
+              sx={{
+                '& .MuiListItemText-primary': {
+                  color: 'text.primary',
+                  fontWeight: 500,
+                },
               }}
             />
-          </Box>
+          </ListItemButton>
+        ))}
+      </List>
 
-          {/* Menu Items */}
-          <List sx={{ flexGrow: 1, overflow: 'auto' }}>
-            {filteredItems.map((item) => (
-              <ListItem key={item.id} disablePadding>
-                <Tooltip 
-                  title={item.description}
-                  placement="right"
-                  enterDelay={500}
-                >
-                  <ListItemButton
-                    sx={{
-                      minHeight: 48,
-                      px: 2.5,
-                      '&:hover': {
-                        bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-                      }
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 40 }}>
-                      <Box
-                        component="img"
-                        src={item.icon}
-                        alt={item.name}
-                        sx={{
-                          width: 24,
-                          height: 24,
-                          filter: 'brightness(0.8)'
-                        }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary={item.name}
-                      primaryTypographyProps={{
-                        variant: 'body2',
-                        sx: { fontWeight: 500 }
-                      }}
-                    />
-                  </ListItemButton>
-                </Tooltip>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
-
-      <Backdrop
-        sx={{ 
-          color: '#fff',
-          zIndex: (theme) => theme.zIndex.drawer - 1,
-          bgcolor: 'rgba(0, 0, 0, 0.3)'
-        }}
-        open={open}
-        onClick={toggleDrawer}
-      />
-
-      {loading && (
-        <Box
+      {/* Sidebar Footer */}
+      <Box sx={{ mt: 'auto', pt: 2 }}>
+        <Divider sx={{ mb: 2 }} />
+        <Typography
+          variant="caption"
           sx={{
-            position: 'absolute',
-            top: '50%',
-            left: open ? 140 : '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: (theme) => theme.zIndex.drawer + 2,
+            color: 'text.secondary',
+            textAlign: 'center',
+            display: 'block',
           }}
         >
-          <CircularProgress color="primary" />
-        </Box>
-      )}
-    </>
+          Application v1.0.0
+        </Typography>
+      </Box>
+    </Box>
   );
+};
+
+NavigationSidebar.propTypes = {
+  navigationItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string.isRequired,
+      icon: PropTypes.node,
+      path: PropTypes.string,
+      onClick: PropTypes.func,
+    })
+  ),
+  title: PropTypes.string,
 };
 
 export default NavigationSidebar; 
