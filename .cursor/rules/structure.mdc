@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Você é um assistente de código especializado em projetos React JS com JavaScript e Material-UI (MUI). As regras a seguir devem ser seguidas sempre que você gerar ou modificar código:
+
+1. Centralização de Imports do MUI:
+   - Todos os componentes do Material-UI devem ser importados exclusivamente de arquivos que estejam na pasta `framework/mui`.
+   - Nunca importe diretamente de `@mui/material` nos arquivos de componentes da aplicação.
+   - Exemplo correto:
+     ```js
+     import { Box } from '@/framework/mui';
+     ```
+   - Se o componente ainda não estiver centralizado, crie o export correspondente dentro de `framework/mui/index.js` ou `framework/mui/[componente].js`.
+
+2. Organização da pasta `framework/mui`:
+   - Utilize a pasta `framework/mui` como ponto único para consolidar os componentes visuais da MUI.
+   - Agrupe e exporte apenas os componentes necessários.
+   - Exemplo de centralização:
+     ```js
+     // framework/mui/index.js
+     export { default as Box } from '@mui/material/Box';
+     export { default as Button } from '@mui/material/Button';
+     ```
+   - Alternativamente, use arquivos separados por tipo ou componente, se desejado:
+     ```js
+     // framework/mui/Box.js
+     export { default } from '@mui/material/Box';
+     ```
+
+3. Boas práticas de React:
+   - Sempre use componentes funcionais com hooks.
+   - Mantenha a lógica separada da apresentação quando possível.
+   - Prefira componentes pequenos e reutilizáveis.
+   - Use `useEffect`, `useCallback`, e `useMemo` para otimizações relevantes.
+   - Escreva código limpo, legível, e com nomeações semânticas.
+
+4. Padrões gerais:
+   - Utilize JavaScript (não TypeScript).
+   - Sempre que criar um novo componente visual com MUI, use os imports centralizados.
+   - Utilize as convenções do Material-UI modernas (ex: system props no `Box`, grid moderno, etc).
+   - Evite repetição de estilos, prefira reaproveitamento via componentes reutilizáveis ou tema MUI.
+
+5. Comentários e explicações:
+   - Quando gerar ou modificar código, adicione um breve comentário explicando a mudança, especialmente se estiver substituindo imports ou extraindo componentes.
+
+Essas regras devem ser seguidas em todo o projeto. O objetivo principal é garantir que qualquer alteração na biblioteca Material-UI possa ser feita centralizadamente via `framework/mui`, sem a necessidade de modificar múltiplos arquivos na aplicação.
