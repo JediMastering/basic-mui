@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
 import { Box, Typography, Paper, Button } from '@mui/material';
 import PropTypes from 'prop-types';
-import { LAYOUT_FEATURES } from '../../../constants/examplePage';
+import { LAYOUT_FEATURES } from '../../../constants/examplePage.jsx';
 
 /**
  * ExampleContent - Content component for the example page

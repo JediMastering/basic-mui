@@ -1,3 +1,10 @@
+/**
+ * Menu Items Mock Data
+ * 
+ * This file contains mock data for navigation menu items.
+ * In a real application, this would come from an API.
+ */
+
 export const menuItems = [
   {
     id: 1,

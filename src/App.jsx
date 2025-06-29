@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -7,9 +6,8 @@ import { ptBR } from "@mui/material/locale";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 
-import ProtectedRoute from "./service/ProtectedRoute";
-import routes from "./service/Routes";
-import ExamplePage from "./pages/ExamplePage";
+import ProtectedRoute from "./service/ProtectedRoute.jsx";
+import routes from "./service/Routes.jsx";
 
 // Create theme with Portuguese locale support
 const theme = createTheme({
@@ -41,8 +39,6 @@ const App = () => {
         <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
           <Router>
             <Routes>
-              {/* Use the new example page for the root route */}
-              <Route path="/" element={<ExamplePage />} />
               {routes.map(({ path, element, isProtected }, index) => (
                 <Route
                   key={index}

@@ -4,7 +4,7 @@ import {
   LAYOUT_FEATURES, 
   HEADER_CONFIG, 
   SIDEBAR_CONFIG 
-} from '../constants/examplePage';
+} from '../constants/examplePage.jsx';
 
 /**
  * useExamplePage - Custom hook for example page logic
@@ -14,13 +14,16 @@ import {
  */
 export const useExamplePage = () => {
   // State management
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Event handlers
   const handleMenuClick = useCallback(() => {
-    console.log('click menu button');
-    setSidebarOpen(prevState => !prevState);
-  }, []);
+    console.log('handleMenuClick chamado, estado atual:', sidebarOpen);
+    setSidebarOpen(prevState => {
+      console.log('handleMenuClick - mudando de', prevState, 'para', !prevState);
+      return !prevState;
+    });
+  }, [sidebarOpen]);
 
   const handleNavigationClick = useCallback((path) => {
     console.log(`Navigating to: ${path}`);

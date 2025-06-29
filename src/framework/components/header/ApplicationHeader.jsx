@@ -25,7 +25,10 @@ const ApplicationHeader = ({ title = 'Application', subtitle, onMenuClick, showM
         {showMenuButton && onMenuClick && (
           <IconButton
             color="inherit"
-            onClick={onMenuClick}
+            onClick={() => {
+              console.log('Botão de menu clicado!');
+              onMenuClick();
+            }}
             sx={{ mr: 2 }}
             aria-label="menu"
           >

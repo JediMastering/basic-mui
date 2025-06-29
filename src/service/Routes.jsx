@@ -1,4 +1,3 @@
-import React from "react";
 import Home from "../components/Home";
 import Login from "../pages/Login";
 import NotFound from "../components/NotFound";
@@ -7,15 +6,21 @@ import Profile from "../pages/Profile";
 import Dashboard from "../pages/Dashboard";
 import UsersPage from "../pages/users/UsersPage";
 import Test from "../pages/Test";
+import ExamplePage from "../pages/ExamplePage";
+import DeliveryPage from "../pages/DeliveryPage";
+import TestSidebar from "../pages/TestSidebar";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
+  { path: "/example", element: <ExamplePage />, isProtected: false },
   { path: "/home", element: <Home />, isProtected: true },
   { path: "/dashboard", element: <Dashboard />, isProtected: true },
   { path: "/settings", element: <Settings />, isProtected: true },
   { path: "/profile", element: <Profile />, isProtected: true },
   { path: "/table", element: <UsersPage />, isProtected: true },
   { path: "/test", element: <Test />, isProtected: false },
+  { path: "/delivery", element: <DeliveryPage />, isProtected: false },
+  { path: "/test-sidebar", element: <TestSidebar />, isProtected: false },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
 

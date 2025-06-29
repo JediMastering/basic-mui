@@ -49,8 +49,9 @@ const FilterSidebar = ({
   onAdvancedFilters
 }) => {
   const [open, setOpen] = React.useState(() => {
-    const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
-    return savedState !== null ? JSON.parse(savedState) : false;
+    // const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
+    // return savedState !== null ? JSON.parse(savedState) : false;
+    return false; // ✅ Sempre começa fechado
   });
   
   const theme = useTheme();

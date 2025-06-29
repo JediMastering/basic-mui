@@ -9,6 +9,8 @@ import PropTypes from 'prop-types';
  * the basic layout structure and delegating specific areas to child components.
  */
 const MainLayout = ({ children, header, sidebar, mainContent }) => {
+  console.log('MainLayout render - sidebar:', !!sidebar);
+  
   return (
     <Box
       sx={{

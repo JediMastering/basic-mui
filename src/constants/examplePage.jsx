@@ -54,7 +54,7 @@ export const HEADER_CONFIG = {
 
 // Sidebar configuration
 export const SIDEBAR_CONFIG = {
-  title: "Main Menu",
+  title: "Main  ",
 };
 
 // Page metadata

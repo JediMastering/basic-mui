@@ -17,7 +17,9 @@ import { useSidebar } from '../hooks/useSidebar';
  * and follows the composition pattern for better maintainability.
  */
 const DeliveryPage = () => {
-  const sidebar = useSidebar(true);
+  const sidebar = useSidebar(false);
+  
+  console.log('DeliveryPage render - sidebar.isOpen:', sidebar.isOpen);
 
   // Header configuration
   const headerConfig = {

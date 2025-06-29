@@ -7,22 +7,31 @@ import { useMediaQuery, useTheme } from '@mui/material';
  * This hook follows the Single Responsibility Principle by only handling
  * sidebar-related state management and responsive behavior.
  */
-export const useSidebar = (initialState = true) => {
+export const useSidebar = (initialState = false) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
+  console.log('useSidebar inicialização - initialState:', initialState, 'isMobile:', isMobile);
   
   const [isOpen, setIsOpen] = useState(initialState);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Auto-close sidebar on mobile when screen size changes
   useEffect(() => {
-    if (isMobile && isOpen) {
-      setIsOpen(false);
-    }
+    console.log('useSidebar useEffect - isMobile:', isMobile, 'isOpen:', isOpen);
+    // Comentando temporariamente para testar
+    // if (isMobile && isOpen) {
+    //   console.log('Fechando sidebar no mobile');
+    //   setIsOpen(false);
+    // }
   }, [isMobile, isOpen]);
 
   const toggleSidebar = () => {
-    setIsOpen(prev => !prev);
+    console.log('toggleSidebar chamado, estado atual:', isOpen);
+    setIsOpen(prev => {
+      console.log('toggleSidebar - mudando de', prev, 'para', !prev);
+      return !prev;
+    });
   };
 
   const openSidebar = () => {
