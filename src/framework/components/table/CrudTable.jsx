@@ -4,7 +4,7 @@ import {
   Button,
   Snackbar,
   Alert
-} from '@mui/material';
+} from 'framework/mui';
 import SmartTable from './SmartTable';
 import DeleteConfirmationDialog from '../dialogs/DeleteConfirmationDialog';
 import { useSnackbar } from '../../hooks/useSnackbar';

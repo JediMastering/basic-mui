@@ -1,4 +1,4 @@
-import { Box, Typography, Paper, Button } from '@mui/material';
+import { Box, Typography, Paper, Button } from 'framework/mui';
 import PropTypes from 'prop-types';
 import { LAYOUT_FEATURES } from '../../../constants/examplePage.jsx';
 

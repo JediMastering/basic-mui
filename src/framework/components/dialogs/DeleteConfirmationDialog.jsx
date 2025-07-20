@@ -6,7 +6,7 @@ import {
   DialogContentText,
   DialogActions,
   Button
-} from '@mui/material';
+} from 'framework/mui';
 
 const DeleteConfirmationDialog = ({ open, onClose, onConfirm, count = 1 }) => {
   return (

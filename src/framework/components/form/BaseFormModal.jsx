@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
   Box
-} from '@mui/material';
+} from 'framework/mui';
 import { useForm } from 'react-hook-form';
 import { requestBackend } from '../../utils/connections';
 

@@ -16,7 +16,7 @@ import {
   InputLabel,
   Select,
   MenuItem
-} from '@mui/material';
+} from 'framework/mui';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import CloseIcon from '@mui/icons-material/Close';
 import FilterAltOffIcon from '@mui/icons-material/FilterAltOff';

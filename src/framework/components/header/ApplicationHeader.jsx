@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, IconButton } from '@mui/material';
+import { Box, Typography, IconButton } from 'framework/mui';
 import MenuIcon from '@mui/icons-material/Menu';
 import PropTypes from 'prop-types';
 

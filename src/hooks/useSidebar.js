@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useMediaQuery, useTheme } from '@mui/material';
+import { useMediaQuery, useTheme } from 'framework/mui';
 
 /**
  * Custom hook for managing sidebar state

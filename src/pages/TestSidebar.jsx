@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Typography } from 'framework/mui';
 import { useSidebar } from '../hooks/useSidebar';
 
 const TestSidebar = () => {

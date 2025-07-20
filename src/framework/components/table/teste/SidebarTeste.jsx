@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box } from 'framework/mui';
 
 export default ({ content }) => {
   return (<>

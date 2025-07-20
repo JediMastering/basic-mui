@@ -13,7 +13,7 @@ import {
   ListItemText,
   Tooltip,
   alpha
-} from '@mui/material';
+} from 'framework/mui';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';

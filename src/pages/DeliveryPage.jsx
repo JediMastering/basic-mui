@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@mui/material';
+import { Button } from 'framework/mui';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import MainLayout from '../framework/layouts/MainLayout';
 import ApplicationHeader from '../framework/components/header/ApplicationHeader';

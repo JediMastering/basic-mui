@@ -12,7 +12,7 @@ import {
   Skeleton,
   Box,
   Typography,
-} from '@mui/material';
+} from 'framework/mui';
 
 import { requestBackend } from '../../utils/connections';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';

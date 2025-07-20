@@ -11,7 +11,7 @@ import {
   DialogContentText,
   DialogActions,
   TextField
-} from '@mui/material';
+} from 'framework/mui';
 import { useForm, Controller } from "react-hook-form";
 import Number from '../framework/components/fields/Number';
 import SmartGenericFormModal from '../framework/components/form/SmartGenericFormModal';

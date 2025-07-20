@@ -4,7 +4,7 @@ import UserForm from './UserForm';
 import Number from '../../framework/components/fields/Number';
 import FilterSidebar from '../../framework/components/sidebar/FilterSidebar';
 import UserFilterForm from './UserFilterForm';
-import { Box } from '@mui/material';
+import { Box } from 'framework/mui';
 
 const EMPTY_VALUES = {
   name: '',
