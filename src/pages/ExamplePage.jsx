@@ -1,64 +1,33 @@
-import ApplicationLayout from '../framework/layouts/ApplicationLayout';
-import ApplicationHeader from '../framework/components/header/ApplicationHeader';
-import NavigationSidebar from '../framework/components/navigation/NavigationSidebar';
+
+import React from 'react';
+import AppLayout from '../framework/layouts/AppLayout';
 import ExampleContent from '../framework/components/content/ExampleContent';
-import { useExamplePage } from '../hooks/useExamplePage';
+import { useExamplePage } from '../framework/hooks/useExamplePage';
 
 /**
- * ExamplePage - Example page demonstrating the new layout
- * 
- * This component shows how to use the improved layout components
- * with proper composition and state management.
- * 
- * Features:
- * - Responsive design
- * - Collapsible sidebar
- * - Fixed header
- * - Clean component structure
- * - English naming conventions
- * - Separated concerns with custom hooks
- * - Reusable components
- * - Dynamic menu loading
+ * ExamplePage - Demonstrates how to use the generic AppLayout.
  */
 const ExamplePage = () => {
   const {
-    sidebarOpen,
     headerConfig,
+    sidebarConfig,
     layoutFeatures,
-    handleMenuClick,
     handleToggleSidebar,
     handleSampleAction,
   } = useExamplePage();
 
-  console.log('ExamplePage render - sidebarOpen:', sidebarOpen);
-
-  const handleNavigationClick = (item) => {
-    console.log('Navigation clicked:', item);
-    // In a real app, you would use React Router here
-  };
-
   return (
-    <>
-      {/* Navigation Sidebar - Connected to useExamplePage state */}
-      <NavigationSidebar 
-        onNavigationClick={handleNavigationClick}
-        open={sidebarOpen}
-        onToggle={handleMenuClick}
+    <AppLayout
+      headerConfig={headerConfig}
+      navigationConfig={sidebarConfig}
+    >
+      <ExampleContent
+        layoutFeatures={layoutFeatures}
+        onToggleSidebar={handleToggleSidebar} // This might be redundant now
+        onSampleAction={handleSampleAction}
       />
-      
-      {/* Main Layout */}
-      <ApplicationLayout
-        header={<ApplicationHeader {...headerConfig} />}
-        mainContent={
-          <ExampleContent
-            layoutFeatures={layoutFeatures}
-            onToggleSidebar={handleToggleSidebar}
-            onSampleAction={handleSampleAction}
-          />
-        }
-      />
-    </>
+    </AppLayout>
   );
 };
 
-export default ExamplePage; 
+export default ExamplePage;
