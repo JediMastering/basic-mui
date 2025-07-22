@@ -13,7 +13,7 @@ import TableExamplePage from "../pages/TableExamplePage";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
-  { path: "/example", element: <ExamplePage />, isProtected: false },
+  { path: "/example", element: <ExamplePage />, isProtected: true },
   { path: "/home", element: <Home />, isProtected: true },
   { path: "/dashboard", element: <Dashboard />, isProtected: true },
   { path: "/settings", element: <Settings />, isProtected: true },

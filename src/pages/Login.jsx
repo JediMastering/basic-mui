@@ -1,36 +1,24 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { authService } from "../service/authService";
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const url = "http://localhost:8080/login";
-
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-
-    localStorage.setItem("authToken", "token");
-    navigate("home");
-    return;
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ username, password })
-    })
-
-    if (response.ok) {
-      const data = await response.json();
-      const token = data.token;
-
+    try {
+      const { token } = await authService.login(username, password);
       localStorage.setItem("authToken", token);
-      navigate("home");
+      navigate("/example");
+    } catch (err) {
+      setError(err.message);
     }
   };
 
@@ -64,6 +52,11 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
           <Button
             type="submit"
             variant="contained"
