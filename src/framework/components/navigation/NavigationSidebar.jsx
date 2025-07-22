@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Drawer,
   IconButton,
@@ -23,6 +24,7 @@ import PropTypes from 'prop-types';
  * NavigationSidebar - Sidebar component for navigation
  */
 const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) => {
+  const navigate = useNavigate();
   // Use external state if provided, otherwise use internal state
   const [internalOpen, setInternalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,6 +40,8 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
     { id: 1, name: 'Dashboard', icon: '/icons/dashboard.svg', path: '/dashboard', description: 'Painel de controle principal' },
     { id: 2, name: 'Usuários', icon: '/icons/users.svg', path: '/users', description: 'Gerenciamento de usuários' },
     { id: 3, name: 'Configurações', icon: '/icons/settings.svg', path: '/settings', description: 'Configurações do sistema' },
+    { id: 4, name: 'Logout', icon: '/icons/logout.svg', path: '/', description: 'Sair do sistema' },
+    { id: 5, name: 'Example', icon: '/icons/example.svg', path: '/example', description: 'Example page for demonstration purposes' },
   ];
 
   const toggleDrawer = () => {
@@ -55,6 +59,8 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
   };
 
   const handleItemClick = (item) => {
+    navigate(item.path); // Navega para a rota
+    console.log('Item clicked:', item);
     if (onNavigationClick) {
       onNavigationClick(item);
     }

@@ -13,13 +13,6 @@ import { useAppLayout } from '../hooks/useAppLayout';
 const AppLayout = ({ children, headerConfig, navigationConfig }) => {
   const { sidebarOpen, handleToggleSidebar } = useAppLayout();
 
-  const handleNavigationClick = (item) => {
-    console.log('Navigation clicked:', item);
-    if (navigationConfig && navigationConfig.onNavigationClick) {
-      navigationConfig.onNavigationClick(item);
-    }
-  };
-
   const augmentedHeaderConfig = {
     ...headerConfig,
     onMenuClick: handleToggleSidebar,
@@ -29,7 +22,6 @@ const AppLayout = ({ children, headerConfig, navigationConfig }) => {
     <>
       <NavigationSidebar 
         {...navigationConfig}
-        onNavigationClick={handleNavigationClick}
         open={sidebarOpen}
         onToggle={handleToggleSidebar}
       />
