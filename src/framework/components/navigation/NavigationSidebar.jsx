@@ -42,6 +42,7 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
     { id: 3, name: 'Configurações', icon: '/icons/settings.svg', path: '/settings', description: 'Configurações do sistema' },
     { id: 4, name: 'Logout', icon: '/icons/logout.svg', path: '/', description: 'Sair do sistema' },
     { id: 5, name: 'Example', icon: '/icons/example.svg', path: '/example', description: 'Example page for demonstration purposes' },
+    { id: 6, name: 'Table Example', icon: '/icons/table.svg', path: '/table-example', description: 'Table example page' },
   ];
 
   const toggleDrawer = () => {
