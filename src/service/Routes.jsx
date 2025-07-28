@@ -19,10 +19,10 @@ const routes = [
   { path: "/settings", element: <Settings />, isProtected: true },
   { path: "/profile", element: <Profile />, isProtected: true },
   { path: "/table", element: <UsersPage />, isProtected: true },
-  { path: "/table-example", element: <TableExamplePage />, isProtected: false },
-  { path: "/test", element: <Test />, isProtected: false },
-  { path: "/delivery", element: <DeliveryPage />, isProtected: false },
-  { path: "/test-sidebar", element: <TestSidebar />, isProtected: false },
+  { path: "/table-example", element: <TableExamplePage />, isProtected: true },
+  { path: "/test", element: <Test />, isProtected: true },
+  { path: "/delivery", element: <DeliveryPage />, isProtected: true },
+  { path: "/test-sidebar", element: <TestSidebar />, isProtected: true },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
 
