@@ -166,11 +166,20 @@ const SmartTable = forwardRef(({
           <TableHead>
             <TableRow>
               {selectable && (
-                <TableCell padding="checkbox">
+                <TableCell padding="checkbox" sx={{ backgroundColor: 'primary.main' }}>
                   <Checkbox
                     checked={selectedRows.length === data.length && data.length > 0}
                     onChange={handleSelectAll}
                     disabled={loading || data.length === 0}
+                    sx={{
+                      color: 'white',
+                      '&.Mui-checked': {
+                        color: 'white',
+                      },
+                      '&.Mui-disabled': {
+                        color: 'rgba(255, 255, 255, 0.5)',
+                      },
+                    }}
                   />
                 </TableCell>
               )}
@@ -186,7 +195,7 @@ const SmartTable = forwardRef(({
                       cursor: col.sortable ? 'pointer' : 'default',
                       userSelect: 'none',
                       fontWeight: 'bold',
-                      backgroundColor: 'background.paper',
+                      backgroundColor: 'primary.main',
                     }}
                   >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

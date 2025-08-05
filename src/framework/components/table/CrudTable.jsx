@@ -3,7 +3,9 @@ import {
   Box, 
   Button,
   Snackbar,
-  Alert
+  Alert,
+  Toolbar,
+  Typography
 } from 'framework/mui';
 import SmartTable from './SmartTable';
 import DeleteConfirmationDialog from '../dialogs/DeleteConfirmationDialog';
@@ -112,32 +114,46 @@ const CrudTable = forwardRef(({
 
   return (
     <>
-      <Box sx={{ display: 'flex', gap: 2, margin: '24px' }}>
-        <Button
-          variant="contained"
-          onClick={handleOpenCreateModal}
+      {selectedRows.length > 0 ? (
+        <Toolbar
+          sx={{
+            backgroundColor: 'primary.main',
+            color: 'white',
+            borderRadius: 1,
+            margin: '24px 24px 0 24px',
+          }}
         >
-          Novo
-        </Button>
-        {selectedRows.length === 1 && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleOpenEditModal}
-          >
-            Editar
-          </Button>
-        )}
-        {selectedRows.length > 0 && (
+          <Typography sx={{ flex: '1 1 100%' }} variant="h6">
+            {selectedRows.length} selecionado(s)
+          </Typography>
+          {selectedRows.length === 1 && (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handleOpenEditModal}
+            >
+              Editar
+            </Button>
+          )}
           <Button
             variant="contained"
             color="error"
             onClick={handleConfirmDelete}
+            sx={{ ml: 2 }}
           >
-            Excluir ({selectedRows.length})
+            Excluir
           </Button>
-        )}
-      </Box>
+        </Toolbar>
+      ) : (
+        <Box sx={{ display: 'flex', gap: 2, margin: '24px' }}>
+          <Button
+            variant="contained"
+            onClick={handleOpenCreateModal}
+          >
+            Novo
+          </Button>
+        </Box>
+      )}
 
       <Box sx={{ padding: 3 }}>
         <SmartTable

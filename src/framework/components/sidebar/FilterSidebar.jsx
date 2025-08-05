@@ -219,11 +219,22 @@ const FilterSidebar = ({
             </Button>
             <Button
               variant="outlined"
-              color="primary"
               onClick={handleClear}
               startIcon={<FilterAltOffIcon />}
               fullWidth
               disabled={!hasActiveFilters}
+              sx={{
+                color: 'white',
+                borderColor: 'white',
+                '&:hover': {
+                  borderColor: 'white',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                },
+                '&.Mui-disabled': {
+                  color: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.3)'
+                }
+              }}
             >
               Limpar
             </Button>
@@ -283,10 +294,13 @@ const FilterSidebar = ({
               }}
             >
               <FilterListIcon 
-                color="primary" 
+                color="inherit" 
                 sx={{ 
                   fontSize: 20,
-                  opacity: 0.8
+                  opacity: 0.8,
+                  backgroundColor: 'primary.main',
+                  borderRadius: '4px',
+                  padding: '2px'
                 }}
               />
             </Badge>
