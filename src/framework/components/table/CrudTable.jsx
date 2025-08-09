@@ -10,7 +10,7 @@ import {
 import SmartTable from './SmartTable';
 import DeleteConfirmationDialog from '../dialogs/DeleteConfirmationDialog';
 import { useSnackbar } from '../../hooks/useSnackbar';
-import { requestBackend } from '../../utils/connections';
+import { apiRequest } from '../../utils/connections';
 
 const CrudTable = forwardRef(({
   columns,
@@ -20,6 +20,7 @@ const CrudTable = forwardRef(({
   CreateForm = EditForm,
   rowKey = row => row.id,
   pageSize = 50,
+  useMock = false,
 }, ref) => {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedIds, setSelectedIds] = useState([]);
@@ -74,7 +75,7 @@ const CrudTable = forwardRef(({
     try {
       const deletePromises = selectedRows.map(async row => {
         try {
-          await requestBackend(`${url}/${row.id}`, 'DELETE');
+          await apiRequest({ url: `${url}/${row.id}`, method: 'DELETE', useMock });
           return { success: true, id: row.id };
         } catch (error) {
           return { success: false, id: row.id, error };
@@ -166,6 +167,7 @@ const CrudTable = forwardRef(({
           selectedRows={selectedIds}
           selectable={true}
           emptyMessage="Sem registros disponíveis"
+          useMock={useMock}
         />
       </Box>
 

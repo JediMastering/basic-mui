@@ -8,7 +8,7 @@ import {
   Box
 } from 'framework/mui';
 import { useForm } from 'react-hook-form';
-import { requestBackend } from '../../utils/connections';
+import { apiRequest } from '../../utils/connections';
 
 const BaseFormModal = ({
   open,
@@ -48,7 +48,7 @@ const BaseFormModal = ({
     try {
       // Se temos um ID nos dados, significa que estamos editando, então usamos PUT
       const method = data.id ? 'PUT' : methodProp;
-      await requestBackend(submitUrl, method, data);
+      await apiRequest(submitUrl, method, data);
       onSuccess?.();
       onClose();
     } catch (error) {

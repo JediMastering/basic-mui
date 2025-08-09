@@ -10,6 +10,7 @@ import ExamplePage from "../pages/ExamplePage";
 import DeliveryPage from "../pages/DeliveryPage";
 import TestSidebar from "../pages/TestSidebar";
 import TableExamplePage from "../pages/TableExamplePage";
+import UsersCrudPage from "../pages/users/UsersCrudPage";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
@@ -20,6 +21,7 @@ const routes = [
   { path: "/profile", element: <Profile />, isProtected: true },
   { path: "/table", element: <UsersPage />, isProtected: true },
   { path: "/table-example", element: <TableExamplePage />, isProtected: true },
+  { path: "/users-crud", element: <UsersCrudPage />, isProtected: true },
   { path: "/test", element: <Test />, isProtected: true },
   { path: "/delivery", element: <DeliveryPage />, isProtected: true },
   { path: "/test-sidebar", element: <TestSidebar />, isProtected: true },

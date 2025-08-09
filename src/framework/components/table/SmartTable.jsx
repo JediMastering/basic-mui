@@ -14,7 +14,7 @@ import {
   Typography,
 } from 'framework/mui';
 
-import { requestBackend } from '../../utils/connections';
+import { apiRequest } from '../../utils/connections';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Text from '../../../framework/components/fields/Text';
@@ -37,6 +37,7 @@ const SmartTable = forwardRef(({
   loading: externalLoading = false,
   emptyMessage = 'Nenhum dado encontrado',
   actions,
+  useMock = false,
 }, ref) => {
   // Estados internos
   const [pageData, setPageData] = useState(
@@ -50,7 +51,7 @@ const SmartTable = forwardRef(({
 
   const getData = async (url) => {
     onRowSelect([], []);
-    return await requestBackend(url);
+    return await apiRequest({ url, useMock });
   };
 
   // Dados a serem exibidos
@@ -68,7 +69,7 @@ const SmartTable = forwardRef(({
         size: pageSize,
         ...(sortCol && sortDir ? { sort: `${sortCol},${sortDir}` } : {}),
       });
-      const fullUrl = `${url}?${params.toString()}`;
+      const fullUrl = useMock ? url : `${url}?${params.toString()}`;
       const response = await getData(fullUrl);
 
       setPageData({
