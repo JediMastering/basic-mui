@@ -1,34 +1,47 @@
-export async function requestBackend(url, method = 'GET', body = null, headers = {}) {
-    const baseUrl = 'http://192.168.15.112:8081/';
-    const config = {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers,
-      },
-    };
-  
-    if (body) {
-      config.body = JSON.stringify(body);
-    }
-  
-    try {
-      const response = await fetch(baseUrl + url, config);
-  
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || `Erro ${response.status}: ${response.statusText}`);
-      }
+import axios from 'axios';
+import { users } from '../../mocks/users.js';
 
-      // Para métodos DELETE, não tentamos ler o corpo da resposta
-      if (method === 'DELETE') {
-        return { success: true };
-      }
-  
-      return await response.json();
-    } catch (error) {
-      console.error('Erro na requisição:', error);
-      throw error;
-    }
+// Mocks organizados por URL e método
+const mockData = {
+  '/users': {
+    GET: users,
+    POST: { success: true },
+  },
+  '/posts': {
+    GET: [{ id: 10, title: 'Mocked Post' }],
+  },
+};
+
+// Delay em milissegundos
+const mockDelay = 500;
+
+/**
+ * Simula um delay
+ * @param {number} ms
+ */
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+/**
+ * Requisição genérica com suporte a mocks e delay
+ */
+export async function apiRequest({ url, method = 'GET', data, config, useMock = false }) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const httpMethod = method.toUpperCase();
+
+  if (!isProd && useMock && mockData[url]?.[httpMethod]) {
+    console.log(`[MOCK] ${httpMethod} ${url} (delay ${mockDelay}ms)`);
+    await wait(mockDelay);
+    return Promise.resolve(mockData[url][httpMethod]);
   }
-  
+
+  const response = await axios({
+    url,
+    method: httpMethod,
+    data,
+    ...config,
+  });
+
+  return response.data;
+}
