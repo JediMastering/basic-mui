@@ -48,7 +48,7 @@ const BaseFormModal = ({
     try {
       // Se temos um ID nos dados, significa que estamos editando, então usamos PUT
       const method = data.id ? 'PUT' : methodProp;
-      await apiRequest(submitUrl, method, data);
+      await apiRequest({ url: submitUrl, method, data, useMock: true });
       onSuccess?.();
       onClose();
     } catch (error) {

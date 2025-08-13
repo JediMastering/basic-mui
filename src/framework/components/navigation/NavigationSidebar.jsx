@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
+import { useMenuData } from '../../../hooks/useMenuData';
 
 /**
  * NavigationSidebar - Sidebar component for navigation
@@ -27,23 +28,13 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
   const navigate = useNavigate();
   // Use external state if provided, otherwise use internal state
   const [internalOpen, setInternalOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { filteredItems, handleSearchChange, searchTerm } = useMenuData();
 
   // Determine which state to use
   const isControlled = externalOpen !== undefined && onToggle !== undefined;
   const open = isControlled ? externalOpen : internalOpen;
 
   console.log('NavigationSidebar render - externalOpen:', externalOpen, 'isControlled:', isControlled, 'open:', open);
-
-  // Mock data for testing
-  const mockItems = [
-    { id: 1, name: 'Dashboard', icon: '/icons/dashboard.svg', path: '/dashboard', description: 'Painel de controle principal' },
-    { id: 2, name: 'Usuários', icon: '/icons/users.svg', path: '/users', description: 'Gerenciamento de usuários' },
-    { id: 3, name: 'Configurações', icon: '/icons/settings.svg', path: '/settings', description: 'Configurações do sistema' },
-    { id: 4, name: 'Logout', icon: '/icons/logout.svg', path: '/', description: 'Sair do sistema' },
-    { id: 5, name: 'Example', icon: '/icons/example.svg', path: '/example', description: 'Example page for demonstration purposes' },
-    { id: 6, name: 'Table Example', icon: '/icons/table.svg', path: '/table-example', description: 'Table example page' },
-  ];
 
   const toggleDrawer = () => {
     console.log('Toggle drawer called, current open state:', open);
@@ -53,10 +44,6 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
       setInternalOpen(!internalOpen); // Use internal toggle
     }
     console.log('New open state will be:', !open);
-  };
-
-  const handleSearchInputChange = (event) => {
-    setSearchTerm(event.target.value);
   };
 
   const handleItemClick = (item) => {
@@ -135,7 +122,7 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
               size="small"
               placeholder="Buscar menu..."
               value={searchTerm}
-              onChange={handleSearchInputChange}
+              onChange={(e) => handleSearchChange(e.target.value)}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -147,7 +134,7 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
           </Box>
 
           <List sx={{ flexGrow: 1, overflow: 'auto' }}>
-            {mockItems.map((item) => (
+            {filteredItems.map((item) => (
               <ListItem key={item.id} disablePadding>
                 <Tooltip 
                   title={item.description}

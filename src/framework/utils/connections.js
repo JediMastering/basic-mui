@@ -1,24 +1,6 @@
 import axios from 'axios';
+import { mockData, mockDelay } from '../../mocks/routes.js';
 import { users } from '../../mocks/data/users.js';
-
-// Mocks organizados por URL e método
-const mockData = {
-  '/users': {
-    GET: {
-      content: users,
-      number: 0,
-      size: 10,
-      totalElements: users.length,
-    },
-    POST: { success: true },
-  },
-  '/posts': {
-    GET: [{ id: 10, title: 'Mocked Post' }],
-  },
-};
-
-// Delay em milissegundos
-const mockDelay = 500;
 
 /**
  * Simula um delay
@@ -37,29 +19,49 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
 
   if (!isProd && useMock) {
     const [path, queryString] = url.split('?');
-    if (mockData[path]?.[httpMethod]) {
+    const pathParts = path.split('/').filter(p => p);
+    const rootPath = `/${pathParts[0]}`;
+
+    if (mockData[rootPath]?.[httpMethod]) {
       console.log(`[MOCK] ${httpMethod} ${url} (delay ${mockDelay}ms)`);
+      if (data) {
+        console.log('[MOCK PAYLOAD]', data);
+      }
       await wait(mockDelay);
 
       if (queryString) {
         const params = new URLSearchParams(queryString);
-        let filteredUsers = users;
+        let filteredData = mockData[rootPath][httpMethod].content;
 
+        // Filtering
         params.forEach((value, key) => {
-          filteredUsers = filteredUsers.filter(user => 
-            user[key]?.toString().toLowerCase().includes(value.toLowerCase())
-          );
+          if (key !== 'sort' && key !== 'page' && key !== 'size') {
+            filteredData = filteredData.filter(item => 
+              item[key]?.toString().toLowerCase().includes(value.toLowerCase())
+            );
+          }
         });
 
+        // Sorting
+        const sort = params.get('sort');
+        if (sort) {
+          const [sortCol, sortDir] = sort.split(',');
+          filteredData.sort((a, b) => {
+            if (a[sortCol] < b[sortCol]) return sortDir === 'asc' ? -1 : 1;
+            if (a[sortCol] > b[sortCol]) return sortDir === 'asc' ? 1 : -1;
+            return 0;
+          });
+        }
+
         return Promise.resolve({
-          content: filteredUsers,
+          content: filteredData,
           number: 0,
           size: 10,
-          totalElements: filteredUsers.length,
+          totalElements: filteredData.length,
         });
       }
 
-      return Promise.resolve(mockData[path][httpMethod]);
+      return Promise.resolve(mockData[rootPath][httpMethod]);
     }
   }
 

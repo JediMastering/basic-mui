@@ -26,6 +26,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import SaveIcon from '@mui/icons-material/Save';
 import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
+import { Tooltip } from '@mui/material';
 
 const SIDEBAR_STATE_KEY = 'filterSidebarOpen';
 
@@ -53,7 +54,7 @@ const FilterSidebar = ({
     // return savedState !== null ? JSON.parse(savedState) : false;
     return false; // ✅ Sempre começa fechado
   });
-  
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -246,8 +247,8 @@ const FilterSidebar = ({
 
   return (
     <>
-      <Box 
-        sx={{ 
+      <Box
+        sx={{
           display: 'flex',
           position: 'relative',
           minHeight: '100%',
@@ -256,55 +257,51 @@ const FilterSidebar = ({
         }}
       >
         {!open && (
-          <Paper
-            elevation={1}
+          //Ajustar este trecho para deixar mais bonito
+          <Box
             sx={{
-              position: 'sticky',
-              top: 0,
-              zIndex: 1,
-              borderRadius: 0,
-              borderRight: 1,
-              borderColor: 'divider',
+              height: '100%',
               bgcolor: 'background.paper',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 40,
-              minHeight: 48,
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              '&:hover': {
-                bgcolor: 'action.hover'
-              }
             }}
-            onClick={handleDrawerToggle}
+            className="filter-sidebar"
           >
-            <Badge
-              color="primary"
-              variant="dot"
-              invisible={!hasActiveFilters}
+             <Box
               sx={{
-                '& .MuiBadge-badge': {
-                  top: 4,
-                  right: 4,
-                  width: 8,
-                  height: 8,
-                  minWidth: 8
+                position: 'sticky',
+                top: 40,
+                transform: 'translateY(-50%)',
+                zIndex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                '&:hover': {
+                  '& .MuiSvgIcon-root': {
+                    color: 'primary.main',
+                    transform: 'scale(1.1)'
+                  }
                 }
               }}
+              onClick={handleDrawerToggle}
             >
-              <FilterListIcon 
-                color="inherit" 
-                sx={{ 
-                  fontSize: 20,
-                  opacity: 0.8,
-                  backgroundColor: 'primary.main',
-                  borderRadius: '4px',
-                  padding: '2px'
-                }}
-              />
-            </Badge>
-          </Paper>
+            <Tooltip title="Filtros" placement="right">
+              <Badge
+                color="primary"
+                variant="dot"
+                invisible={!hasActiveFilters}
+              >
+                <FilterListIcon
+                  color="inherit"
+                  sx={{
+                    fontSize: 28,
+                    transition: 'all 0.2s',
+                  }}
+                />
+              </Badge>
+            </Tooltip>
+            </Box>
+          </Box>
         )}
 
         <Drawer
@@ -345,7 +342,7 @@ const FilterSidebar = ({
             <IconButton
               color="primary"
               onClick={handleDrawerToggle}
-              sx={{ 
+              sx={{
                 bgcolor: 'background.paper',
                 boxShadow: theme.shadows[2],
                 '&:hover': {

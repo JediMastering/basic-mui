@@ -48,10 +48,11 @@ const SmartTable = forwardRef(({
   const [sortColumn, setSortColumn] = useState(externalSortColumn || null);
   const [sortDirection, setSortDirection] = useState(externalSortDirection);
   const [loading, setLoading] = useState(externalLoading);
+  const [filters, setFilters] = useState({});
 
-  const getData = async (url) => {
+  const getData = async (url, params) => {
     onRowSelect([], []);
-    return await apiRequest({ url, useMock });
+    return await apiRequest({ url: `${url}?${params.toString()}`, useMock });
   };
 
   // Dados a serem exibidos
@@ -59,7 +60,7 @@ const SmartTable = forwardRef(({
   const total = externalTotal || pageData.totalElements || 0;
 
   // Função para buscar dados
-  const fetchData = async (pageNum, sortCol, sortDir) => {
+  const fetchData = async (pageNum, sortCol, sortDir, currentFilters) => {
     if (!url) return;
 
     setLoading(true);
@@ -68,9 +69,9 @@ const SmartTable = forwardRef(({
         page: pageNum,
         size: pageSize,
         ...(sortCol && sortDir ? { sort: `${sortCol},${sortDir}` } : {}),
+        ...currentFilters
       });
-      const fullUrl = useMock ? url : `${url}?${params.toString()}`;
-      const response = await getData(fullUrl);
+      const response = await getData(url, params);
 
       setPageData({
         content: response.content || [],
@@ -89,9 +90,9 @@ const SmartTable = forwardRef(({
   // Buscar dados na montagem inicial e quando page, sortColumn ou sortDirection mudarem
   useEffect(() => {
     if (url && !externalData) {
-      fetchData(page, sortColumn, sortDirection);
+      fetchData(page, sortColumn, sortDirection, filters);
     }
-  }, [page, sortColumn, sortDirection, url, externalData, pageSize]);
+  }, [page, sortColumn, sortDirection, url, externalData, pageSize, filters]);
 
   const isSelected = (row) => selectedRows.includes(rowKey(row));
 
@@ -145,6 +146,10 @@ const SmartTable = forwardRef(({
     }
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
   const renderCell = (col, row) => {
     if (typeof col.field === 'function') {
       return col.field(row);
@@ -155,7 +160,10 @@ const SmartTable = forwardRef(({
   // Expondo o método de recarga para o componente pai
   useImperativeHandle(ref, () => ({
     reload: () => {
-      fetchData(page, sortColumn, sortDirection);
+      fetchData(page, sortColumn, sortDirection, filters);
+    },
+    filter: (newFilters) => {
+      handleFilterChange(newFilters);
     }
   }));
 

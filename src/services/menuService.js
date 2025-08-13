@@ -4,15 +4,7 @@
  * This service follows the Single Responsibility Principle by only handling
  * menu-related data fetching operations.
  */
-
-import { menuItems } from '../mocks/menuItems';
-
-/**
- * Simulates a network delay
- * @param {number} ms - Delay in milliseconds
- * @returns {Promise} - Promise that resolves after the delay
- */
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+import { apiRequest } from '../framework/utils/connections';
 
 /**
  * Fetches user menu items from the API
@@ -21,8 +13,8 @@ const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 export const fetchUserMenus = async () => {
   try {
     // Simula uma chamada à API com 500ms de delay
-    await delay(500);
-    return menuItems;
+    const response = await apiRequest({ url: '/menus', method: 'GET', useMock: true });
+    return response;
   } catch (error) {
     console.error('Error fetching user menus:', error);
     throw error;
