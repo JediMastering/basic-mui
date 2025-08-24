@@ -16,6 +16,7 @@ function wait(ms) {
 export async function apiRequest({ url, method = 'GET', data, config, useMock = false }) {
   const isProd = process.env.NODE_ENV === 'production';
   const httpMethod = method.toUpperCase();
+  const urlbase = "http://localhost:8080"
 
   if (!isProd && useMock) {
     const [path, queryString] = url.split('?');
@@ -65,8 +66,10 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
     }
   }
 
+  const urlrequest = urlbase + "/" + url
+
   const response = await axios({
-    url,
+    url: urlrequest,
     method: httpMethod,
     data,
     ...config,

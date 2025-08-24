@@ -14,8 +14,8 @@ const Login = () => {
     setError("");
 
     try {
-      const { token } = await authService.login(username, password);
-      localStorage.setItem("authToken", token);
+      const { accessToken } = await authService.login(username, password);
+      localStorage.setItem("accessToken", accessToken);
       navigate("/example");
     } catch (err) {
       setError(err.message);

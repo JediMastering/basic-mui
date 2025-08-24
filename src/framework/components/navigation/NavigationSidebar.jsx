@@ -48,7 +48,7 @@ const NavigationSidebar = ({ onNavigationClick, open: externalOpen, onToggle }) 
 
   const handleItemClick = (item) => {
     if (item.path === '/') {
-      localStorage.removeItem('authToken'); // Clear auth token on logout
+      localStorage.removeItem('accessToken'); // Clear auth token on logout
     } 
     navigate(item.path); // Navega para a rota
     console.log('Item clicked:', item);

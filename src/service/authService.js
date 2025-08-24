@@ -1,14 +1,9 @@
+import { apiRequest } from '../framework/utils/connections';
 
-const login = (username, password) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (username === "admin" && password === "admin") {
-        resolve({ token: "fake-jwt-token" });
-      } else {
-        reject(new Error("Invalid credentials"));
-      }
-    }, 1000);
-  });
+const login = async (username, password) => {
+  const response = await apiRequest({ url: "login", method:"post", data:{ username,  password}});
+
+  return response
 };
 
 export const authService = {

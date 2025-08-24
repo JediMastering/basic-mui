@@ -29,7 +29,7 @@ export default function SwipeableTemporaryDrawer({ children }) {
 
   // Função de Logout
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
+    localStorage.removeItem("accessToken");
     navigate("/"); // Redireciona para a página inicial
   };
 
