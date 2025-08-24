@@ -68,10 +68,20 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
 
   const urlrequest = urlbase + "/" + url
 
+  // Get user credentials from localStorage
+  const accessToken = localStorage.getItem('accessToken');
+
+  // Create Authorization header if accessToken is available
+  const headers = {};
+  if (accessToken && accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
   const response = await axios({
     url: urlrequest,
     method: httpMethod,
     data,
+    headers,
     ...config,
   });
 
