@@ -1,7 +1,9 @@
 import React from 'react';
 import { Box, Typography, IconButton } from 'framework/mui';
 import MenuIcon from '@mui/icons-material/Menu';
+import LogoutIcon from '@mui/icons-material/Logout';
 import PropTypes from 'prop-types';
+import { authService } from '../../../service/authService';
 
 /**
  * ApplicationHeader - Simple header component
@@ -62,7 +64,13 @@ const ApplicationHeader = ({ title = 'Application', subtitle, onMenuClick, showM
 
       {/* Right side - Can be extended with user actions */}
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        {/* Placeholder for future user actions */}
+        <IconButton
+          color="inherit"
+          onClick={authService.logout}
+          aria-label="logout"
+        >
+          <LogoutIcon />
+        </IconButton>
       </Box>
     </Box>
   );
