@@ -109,7 +109,7 @@ const UsersCrudPage = () => {
           <CrudTable
             ref={tableRef}
             columns={columns}
-            url="/users"
+            url="users"
             title="Usuários"
             EditForm={UserForm}
             useMock={true}

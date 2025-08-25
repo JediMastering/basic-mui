@@ -6,9 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import BaseFormModal from '../../framework/components/form/BaseFormModal';
 
 const validationSchema = yup.object().shape({
-  name: yup.string().required('Nome é obrigatório'),
-  email: yup.string().email('Email inválido').required('Email é obrigatório'),
-  role: yup.string().required('Role é obrigatório')
+  username: yup.string().required('Username é obrigatório'),
+  password: yup.string().required('Password é obrigatório'),
 });
 
 const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }) => {
@@ -26,13 +25,13 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
       {(control) => (
         <>
           <Controller
-            name="name"
+            name="username"
             control={control}
             defaultValue=""
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                label="Nome"
+                label="Username"
                 fullWidth
                 error={!!error}
                 helperText={error?.message}
@@ -40,27 +39,14 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
             )}
           />
           <Controller
-            name="email"
+            name="password"
             control={control}
             defaultValue=""
             render={({ field, fieldState: { error } }) => (
               <TextField
                 {...field}
-                label="Email"
-                fullWidth
-                error={!!error}
-                helperText={error?.message}
-              />
-            )}
-          />
-          <Controller
-            name="role"
-            control={control}
-            defaultValue=""
-            render={({ field, fieldState: { error } }) => (
-              <TextField
-                {...field}
-                label="Role"
+                label="Password"
+                type="password"
                 fullWidth
                 error={!!error}
                 helperText={error?.message}
