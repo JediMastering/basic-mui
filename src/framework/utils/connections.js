@@ -77,13 +77,21 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
-  const response = await axios({
-    url: urlrequest,
-    method: httpMethod,
-    data,
-    headers,
-    ...config,
-  });
+  try {
+    const response = await axios({
+      url: urlrequest,
+      method: httpMethod,
+      data,
+      headers,
+      ...config,
+    });
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      localStorage.removeItem('accessToken');
+      navigation.navigate('/');
+    }
+    throw error;
+  }
 }
