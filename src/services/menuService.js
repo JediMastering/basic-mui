@@ -4,21 +4,15 @@
  * This service follows the Single Responsibility Principle by only handling
  * menu-related data fetching operations.
  */
-import { apiRequest } from '../framework/utils/connections';
+import { menuItems } from '../mocks/data/menus.js';
 
 /**
  * Fetches user menu items from the API
  * @returns {Promise<Array>} - Promise that resolves to menu items array
  */
 export const fetchUserMenus = async () => {
-  try {
-    // Simula uma chamada à API com 500ms de delay
-    const response = await apiRequest({ url: '/menus', method: 'GET', useMock: true });
-    return response;
-  } catch (error) {
-    console.error('Error fetching user menus:', error);
-    throw error;
-  }
+  // Directly return the mock data, simulating an async call
+  return Promise.resolve(menuItems);
 };
 
 /**

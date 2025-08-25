@@ -1,30 +1,12 @@
-import Home from "../components/Home";
 import Login from "../pages/Login";
 import NotFound from "../components/NotFound";
-import Settings from "../pages/Settings";
-import Profile from "../pages/Profile";
-import Dashboard from "../pages/Dashboard";
-import UsersPage from "../pages/users/UsersPage";
-import Test from "../pages/Test";
 import ExamplePage from "../pages/ExamplePage";
-import DeliveryPage from "../pages/DeliveryPage";
-import TestSidebar from "../pages/TestSidebar";
-import TableExamplePage from "../pages/TableExamplePage";
 import UsersCrudPage from "../pages/users/UsersCrudPage";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
   { path: "/example", element: <ExamplePage />, isProtected: true },
-  { path: "/home", element: <Home />, isProtected: true },
-  { path: "/dashboard", element: <Dashboard />, isProtected: true },
-  { path: "/settings", element: <Settings />, isProtected: true },
-  { path: "/profile", element: <Profile />, isProtected: true },
-  { path: "/table", element: <UsersPage />, isProtected: true },
-  { path: "/table-example", element: <TableExamplePage />, isProtected: true },
   { path: "/users-crud", element: <UsersCrudPage />, isProtected: true },
-  { path: "/test", element: <Test />, isProtected: true },
-  { path: "/delivery", element: <DeliveryPage />, isProtected: true },
-  { path: "/test-sidebar", element: <TestSidebar />, isProtected: true },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
 

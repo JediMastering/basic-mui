@@ -1,5 +1,4 @@
 import { users } from './data/users.js';
-import { menuItems } from './data/menus.js';
 
 // Mocks organizados por URL e método
 export const mockData = {
@@ -14,12 +13,6 @@ export const mockData = {
     PUT: { success: true },
     DELETE: { success: true },
   },
-  '/posts': {
-    GET: [{ id: 10, title: 'Mocked Post' }],
-  },
-  '/menus': {
-    GET: menuItems,
-  }
 };
 
 // Delay em milissegundos
