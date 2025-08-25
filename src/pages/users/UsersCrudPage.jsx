@@ -35,13 +35,8 @@ const UsersCrudPage = () => {
       columnName: 'id',
     },
     {
-      label: 'Nome',
-      field: 'name',
-      sortable: true,
-    },
-    {
-      label: 'Email',
-      field: 'email',
+      label: 'Username',
+      field: 'username',
       sortable: true,
     },
     {
@@ -73,7 +68,7 @@ const UsersCrudPage = () => {
     
     // Recarrega a tabela com os novos filtros
     if (tableRef.current) {
-      tableRef.current.reload(`/users?${searchParams.toString()}`);
+      tableRef.current.reload(`users?${searchParams.toString()}`);
     }
   };
 
@@ -82,7 +77,7 @@ const UsersCrudPage = () => {
     setFilterValues(EMPTY_VALUES);
     setHasActiveFilters(false);
     if (tableRef.current) {
-      tableRef.current.reload('/users');
+      tableRef.current.reload('users');
     }
   };
 
@@ -112,7 +107,6 @@ const UsersCrudPage = () => {
             url="users"
             title="Usuários"
             EditForm={UserForm}
-            useMock={true}
           />
         </Box>
       </Box>
