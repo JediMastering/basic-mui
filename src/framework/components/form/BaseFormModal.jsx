@@ -9,6 +9,7 @@ import {
 } from 'framework/mui';
 import { useForm } from 'react-hook-form';
 import { apiRequest } from '../../utils/connections';
+import { useSnackbar } from '../../hooks/useSnackbar';
 
 const BaseFormModal = ({
   open,
@@ -21,18 +22,18 @@ const BaseFormModal = ({
   children,
   validationSchema,
 }) => {
-  const { handleSubmit, control, reset } = useForm({
+  const { handleSubmit, control, reset, setError } = useForm({
     defaultValues: initialValues,
     resolver: validationSchema,
     mode: 'onChange'
   });
 
+  const { showSnackbar } = useSnackbar();
+
   const prevOpenRef = React.useRef(open);
   const prevInitialValuesRef = React.useRef(initialValues);
 
   React.useEffect(() => {
-    // Only reset if the modal is opening (was closed and now is open)
-    // or if initialValues have changed
     if (
       (!prevOpenRef.current && open) ||
       JSON.stringify(prevInitialValuesRef.current) !== JSON.stringify(initialValues)
@@ -46,12 +47,30 @@ const BaseFormModal = ({
 
   const onSubmit = async (data) => {
     try {
-      // Se temos um ID nos dados, significa que estamos editando, então usamos PUT
       const method = data.id ? 'PUT' : methodProp;
       await apiRequest({ url: submitUrl, method, data });
       onSuccess?.();
       onClose();
     } catch (error) {
+      let message = 'Erro ao enviar formulário.';
+      if (error.response && error.response.data) {
+        const responseData = error.response.data;
+        if (responseData.detail) {
+          message = responseData.detail;
+        } else if (responseData.message) {
+          message = responseData.message;
+        }
+        
+        if (responseData.errors) {
+          Object.entries(responseData.errors).forEach(([field, errors]) => {
+            setError(field, {
+              type: 'manual',
+              message: errors.join(', '),
+            });
+          });
+        }
+      }
+      showSnackbar(message, 'error');
       console.error('Erro ao enviar formulário:', error);
     }
   };
@@ -85,4 +104,4 @@ const BaseFormModal = ({
   );
 };
 
-export default BaseFormModal; 
+export default BaseFormModal;
