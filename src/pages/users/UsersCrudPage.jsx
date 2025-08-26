@@ -9,9 +9,9 @@ import UserFilterForm from './UserFilterForm';
 import { Box } from 'framework/mui';
 
 const EMPTY_VALUES = {
-  name: '',
-  email: '',
-  role: ''
+  q: '',
+  id: '',
+  username: ''
 };
 
 const UsersCrudPage = () => {
