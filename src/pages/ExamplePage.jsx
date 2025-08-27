@@ -12,7 +12,6 @@ const ExamplePage = () => {
     headerConfig,
     sidebarConfig,
     layoutFeatures,
-    handleToggleSidebar,
     handleSampleAction,
   } = useExamplePage();
 
@@ -23,7 +22,6 @@ const ExamplePage = () => {
     >
       <ExampleContent
         layoutFeatures={layoutFeatures}
-        onToggleSidebar={handleToggleSidebar} // This might be redundant now
         onSampleAction={handleSampleAction}
       />
     </AppLayout>

@@ -10,7 +10,6 @@ import { LAYOUT_FEATURES } from '../../../constants/examplePage.jsx';
  */
 const ExampleContent = ({ 
   layoutFeatures = [], 
-  onToggleSidebar, 
   onSampleAction 
 }) => {
   const features = layoutFeatures.length > 0 ? layoutFeatures : LAYOUT_FEATURES;
@@ -42,7 +41,6 @@ const ExampleContent = ({
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           <Button 
             variant="contained" 
-            onClick={onToggleSidebar}
           >
             Toggle Sidebar
           </Button>
@@ -60,7 +58,6 @@ const ExampleContent = ({
 
 ExampleContent.propTypes = {
   layoutFeatures: PropTypes.arrayOf(PropTypes.string),
-  onToggleSidebar: PropTypes.func.isRequired,
   onSampleAction: PropTypes.func.isRequired,
 };
 
