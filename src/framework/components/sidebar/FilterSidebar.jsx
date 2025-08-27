@@ -47,7 +47,8 @@ const FilterSidebar = ({
   onSearch,
   onSave,
   savedQueries = [],
-  onAdvancedFilters
+  onAdvancedFilters,
+  formId
 }) => {
   const [open, setOpen] = React.useState(() => {
     // const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
@@ -63,13 +64,6 @@ const FilterSidebar = ({
     setOpen(newState);
     if (!isMobile) {
       localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(newState));
-    }
-  };
-
-  const handleFilter = () => {
-    onFilter?.();
-    if (isMobile) {
-      setOpen(false);
     }
   };
 
@@ -122,9 +116,10 @@ const FilterSidebar = ({
             <Button
               variant="contained"
               color="primary"
-              onClick={handleFilter}
               startIcon={<FilterListIcon />}
               fullWidth
+              type="submit"
+              form={formId}
             >
               Filtrar
             </Button>

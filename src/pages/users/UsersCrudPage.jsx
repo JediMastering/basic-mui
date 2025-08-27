@@ -81,7 +81,7 @@ const UsersCrudPage = () => {
     }
   };
 
-  
+  const filterFormId = 'user-filter-form';
 
   return (
     <AppLayout
@@ -93,10 +93,13 @@ const UsersCrudPage = () => {
           onFilter={handleFilter}
           onClear={handleClearFilter}
           hasActiveFilters={hasActiveFilters}
+          formId={filterFormId}
         >
           <UserFilterForm
             ref={formRef}
             defaultValues={filterValues}
+            onFilter={handleFilter}
+            id={filterFormId}
           />
         </FilterSidebar>
 

@@ -8,7 +8,7 @@ const EMPTY_VALUES = {
   role: ''
 };
 
-const UserFilterForm = forwardRef(({ defaultValues }, ref) => {
+const UserFilterForm = forwardRef(({ defaultValues, onFilter, id }, ref) => {
   const { register, reset, getValues } = useForm({
     defaultValues: defaultValues || EMPTY_VALUES
   });
@@ -22,30 +22,39 @@ const UserFilterForm = forwardRef(({ defaultValues }, ref) => {
     getValues
   }));
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (onFilter) {
+      onFilter();
+    }
+  };
+
   return (
-    <Stack spacing={2}>
-      <TextField
-        label="Nome"
-        variant="outlined"
-        size="small"
-        fullWidth
-        {...register('name')}
-      />
-      <TextField
-        label="E-mail"
-        variant="outlined"
-        size="small"
-        fullWidth
-        {...register('email')}
-      />
-      <TextField
-        label="Função"
-        variant="outlined"
-        size="small"
-        fullWidth
-        {...register('role')}
-      />
-    </Stack>
+    <form id={id} onSubmit={handleSubmit}>
+      <Stack spacing={2}>
+        <TextField
+          label="Nome"
+          variant="outlined"
+          size="small"
+          fullWidth
+          {...register('name')}
+        />
+        <TextField
+          label="E-mail"
+          variant="outlined"
+          size="small"
+          fullWidth
+          {...register('email')}
+        />
+        <TextField
+          label="Função"
+          variant="outlined"
+          size="small"
+          fullWidth
+          {...register('role')}
+        />
+      </Stack>
+    </form>
   );
 });
 

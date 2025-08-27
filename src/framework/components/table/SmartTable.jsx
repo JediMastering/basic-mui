@@ -52,7 +52,8 @@ const SmartTable = forwardRef(({
 
   const getData = async (url, params) => {
     onRowSelect([], []);
-    return await apiRequest({ url: `${url}?${params.toString()}`, useMock });
+    const separator = url.includes('?') ? '&' : '?';
+    return await apiRequest({ url: `${url}${separator}${params.toString()}`, useMock });
   };
 
   // Dados a serem exibidos
