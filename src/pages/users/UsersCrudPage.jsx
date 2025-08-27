@@ -94,6 +94,7 @@ const UsersCrudPage = () => {
           onClear={handleClearFilter}
           hasActiveFilters={hasActiveFilters}
           formId={filterFormId}
+          persistenceKey="users-crud-filter-sidebar-open"
         >
           <UserFilterForm
             ref={formRef}

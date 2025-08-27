@@ -28,8 +28,6 @@ import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
 import { Tooltip } from '@mui/material';
 
-const SIDEBAR_STATE_KEY = 'filterSidebarOpen';
-
 /**
  * FilterSidebar - Sidebar component for filtering and search functionality
  * 
@@ -48,12 +46,13 @@ const FilterSidebar = ({
   onSave,
   savedQueries = [],
   onAdvancedFilters,
-  formId
+  formId,
+  persistenceKey
 }) => {
   const [open, setOpen] = React.useState(() => {
-    // const savedState = localStorage.getItem(SIDEBAR_STATE_KEY);
-    // return savedState !== null ? JSON.parse(savedState) : false;
-    return false; // ✅ Sempre começa fechado
+    if (!persistenceKey) return false;
+    const savedState = localStorage.getItem(persistenceKey);
+    return savedState !== null ? JSON.parse(savedState) : false;
   });
 
   const theme = useTheme();
@@ -62,8 +61,8 @@ const FilterSidebar = ({
   const handleDrawerToggle = () => {
     const newState = !open;
     setOpen(newState);
-    if (!isMobile) {
-      localStorage.setItem(SIDEBAR_STATE_KEY, JSON.stringify(newState));
+    if (!isMobile && persistenceKey) {
+      localStorage.setItem(persistenceKey, JSON.stringify(newState));
     }
   };
 
