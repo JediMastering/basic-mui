@@ -12,5 +12,12 @@ export const menuItems = [
     icon: '/icons/users.svg',
     path: '/users-crud',
     description: 'Gerenciamento de usuários'
+  },
+  {
+    id: 3,
+    name: 'Grupos de Acesso',
+    icon: '/icons/suppliers.svg',
+    path: '/access-groups-crud',
+    description: 'Gerenciamento de grupos de acesso'
   }
 ];

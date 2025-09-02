@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useSnackbar } from "../framework/hooks/useSnackbar";
 import { authService } from "../service/authService";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { showSnackbar } = useSnackbar();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
 
     try {
       const { accessToken } = await authService.login(username, password);
       localStorage.setItem("accessToken", accessToken);
       navigate("/example");
     } catch (err) {
-      setError(err.message);
+      showSnackbar(err.response?.data?.message || err.message, "error");
     }
   };
 
@@ -52,11 +52,6 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {error && (
-            <Typography color="error" variant="body2">
-              {error}
-            </Typography>
-          )}
           <Button
             type="submit"
             variant="contained"

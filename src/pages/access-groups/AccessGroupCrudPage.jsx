@@ -2,19 +2,19 @@ import React, { useState, useRef } from 'react';
 import AppLayout from '../../framework/layouts/AppLayout';
 import { useExamplePage } from '../../framework/hooks/useExamplePage';
 import CrudTable from '../../framework/components/table/CrudTable';
-import UserForm from './UserForm';
+import AccessGroupForm from './AccessGroupForm';
 import Number from '../../framework/components/fields/Number';
 import FilterSidebar from '../../framework/components/sidebar/FilterSidebar';
-import UserFilterForm from './UserFilterForm';
+import AccessGroupFilterForm from './AccessGroupFilterForm';
 import { Box } from 'framework/mui';
 
 const EMPTY_VALUES = {
   q: '',
   id: '',
-  username: ''
+  name: ''
 };
 
-const UsersCrudPage = () => {
+const AccessGroupCrudPage = () => {
   const {
     headerConfig,
     sidebarConfig,
@@ -25,8 +25,6 @@ const UsersCrudPage = () => {
   const tableRef = useRef();
   const formRef = useRef();
 
-  
-
   const columns = [
     {
       label: 'Identificador',
@@ -35,14 +33,13 @@ const UsersCrudPage = () => {
       columnName: 'id',
     },
     {
-      label: 'Username',
-      field: 'username',
+      label: 'Nome do Grupo',
+      field: 'name',
       sortable: true,
     },
   ];
 
   const handleFilter = () => {
-    // Pega os valores atuais do formulário
     const values = formRef.current?.getValues() || {};
     
     const cleanedFilters = Object.entries(values).reduce((acc, [key, value]) => {
@@ -55,15 +52,13 @@ const UsersCrudPage = () => {
     setFilterValues(cleanedFilters);
     setHasActiveFilters(Object.keys(cleanedFilters).length > 0);
     
-    // Atualiza a URL com os filtros
     const searchParams = new URLSearchParams();
     Object.entries(cleanedFilters).forEach(([key, value]) => {
       searchParams.append(key, value);
     });
     
-    // Recarrega a tabela com os novos filtros
     if (tableRef.current) {
-      tableRef.current.reload(`users?${searchParams.toString()}`);
+      tableRef.current.reload(`access-groups?${searchParams.toString()}`);
     }
   };
 
@@ -72,11 +67,11 @@ const UsersCrudPage = () => {
     setFilterValues(EMPTY_VALUES);
     setHasActiveFilters(false);
     if (tableRef.current) {
-      tableRef.current.reload('users');
+      tableRef.current.reload('access-groups');
     }
   };
 
-  const filterFormId = 'user-filter-form';
+  const filterFormId = 'access-group-filter-form';
 
   return (
     <AppLayout
@@ -89,9 +84,9 @@ const UsersCrudPage = () => {
           onClear={handleClearFilter}
           hasActiveFilters={hasActiveFilters}
           formId={filterFormId}
-          persistenceKey="users-crud-filter-sidebar-open"
+          persistenceKey="access-groups-crud-filter-sidebar-open"
         >
-          <UserFilterForm
+          <AccessGroupFilterForm
             ref={formRef}
             defaultValues={filterValues}
             onFilter={handleFilter}
@@ -103,9 +98,9 @@ const UsersCrudPage = () => {
           <CrudTable
             ref={tableRef}
             columns={columns}
-            url="users"
-            title="Usuários"
-            EditForm={UserForm}
+            url="access-groups"
+            title="Grupos de Acesso"
+            EditForm={AccessGroupForm}
           />
         </Box>
       </Box>
@@ -113,4 +108,4 @@ const UsersCrudPage = () => {
   );
 };
 
-export default UsersCrudPage;
+export default AccessGroupCrudPage;

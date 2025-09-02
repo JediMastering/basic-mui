@@ -18,6 +18,7 @@ import { apiRequest } from '../../utils/connections';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Text from '../../../framework/components/fields/Text';
+// SmartTable component
 
 const SmartTable = forwardRef(({
   data: externalData,
@@ -50,7 +51,7 @@ const SmartTable = forwardRef(({
   const [loading, setLoading] = useState(externalLoading);
   const [filters, setFilters] = useState({});
 
-  const getData = async (url, params) => {
+    const getData = async (url, params) => {
     onRowSelect([], []);
     const separator = url.includes('?') ? '&' : '?';
     return await apiRequest({ url: `${url}${separator}${params.toString()}`, useMock });

@@ -82,10 +82,10 @@ const BaseFormModal = ({
       maxWidth="sm"
       fullWidth
     >
-      <DialogTitle>
-        {title}
-      </DialogTitle>
       <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>
+          {title}
+        </DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
             {typeof children === 'function' ? children(control) : children}

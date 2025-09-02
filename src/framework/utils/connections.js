@@ -89,8 +89,10 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
     return response.data;
   } catch (error) {
     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      localStorage.removeItem('accessToken');
-      navigation.navigate('/');
+      if (url !== 'login') {
+        localStorage.removeItem('accessToken');
+        navigation.navigate('/');
+      }
     }
     throw error;
   }
