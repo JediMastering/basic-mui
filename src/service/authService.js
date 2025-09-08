@@ -1,9 +1,10 @@
 import { apiRequest } from '../framework/utils/connections';
 
-const login = async (username, password) => {
-  const response = await apiRequest({ url: "login", method:"post", data:{ username,  password}});
+import api from './api';
 
-  return response
+export const login = async (username, password) => {
+    const response = await api.post('/login', { username, password });
+    return response.data;
 };
 
 const logout = () => {
