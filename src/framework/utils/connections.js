@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { mockData, mockDelay } from '../../mocks/routes.js';
-import { users } from '../../mocks/data/users.js';
 
 /**
  * Simula um delay
