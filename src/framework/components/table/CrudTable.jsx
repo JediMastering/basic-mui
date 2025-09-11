@@ -167,7 +167,6 @@ const CrudTable = forwardRef(({
           selectedRows={selectedIds}
           selectable={true}
           emptyMessage="Sem registros disponíveis"
-          useMock={useMock}
         />
       </Box>
 
@@ -177,6 +176,7 @@ const CrudTable = forwardRef(({
           onClose={handleCloseCreateModal}
           onSuccess={handleCreateSuccess}
           submitUrl={url}
+          method="POST"
         />
       )}
 
