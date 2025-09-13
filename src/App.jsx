@@ -1,27 +1,62 @@
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Login from "./pages/Login";
-import NotFound from "./components/NotFound";
-import System from "./layout/System"
-import Settings from "./pages/Settings";
-import Profile from "./pages/Profile";
-import Dashboard from "./pages/Dashboard";
-import Test from "./pages/Test";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { ptBR } from "@mui/material/locale";
+import CssBaseline from "@mui/material/CssBaseline";
+import Box from "@mui/material/Box";
+
+import ProtectedRoute from "./service/ProtectedRoute.jsx";
+import routes from "./service/Routes.jsx";
+
+// Create theme with Portuguese locale support
+const theme = createTheme({
+  palette: {
+    background: {
+      default: "#0d1b2a",
+      paper: "#1a2c3d",
+    },
+    primary: {
+      main: "#1976d2",
+      contrastText: "#ffffff",
+    },
+    text: {
+      primary: "#ffffff",
+      secondary: "#aaaaaa",
+    },
+    divider: "#444444",
+  },
+  typography: {
+    fontFamily: "Roboto, Arial, sans-serif",
+  },
+}, ptBR);
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<System><Home /></System>} />
-        <Route path="test" element={<Test />} />
-        <Route path="/dashboard" element={<System><Dashboard /></System>} />
-        <Route path="/settings" element={<System><Settings /></System>} />
-        <Route path="/profile" element={<System><Profile /></System>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Router>
+    <ThemeProvider theme={theme}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+        <CssBaseline />
+        <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+          <Router>
+            <Routes>
+              {routes.map(({ path, element, isProtected }, index) => (
+                <Route
+                  key={index}
+                  path={path}
+                  element={
+                    isProtected ? (
+                      <ProtectedRoute>{element}</ProtectedRoute>
+                    ) : (
+                      element
+                    )
+                  }
+                />
+              ))}
+            </Routes>
+          </Router>
+        </Box>
+      </LocalizationProvider>
+    </ThemeProvider>
   );
 };
 

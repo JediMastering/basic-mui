@@ -1,14 +1,25 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, Typography, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { authService } from "../service/authService";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica de login, como uma chamada para API
-    console.log("Login submitted:", email, password);
+    setError("");
+
+    try {
+      const { accessToken } = await authService.login(username, password);
+      localStorage.setItem("accessToken", accessToken);
+      navigate("/example");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
@@ -29,8 +40,8 @@ const Login = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
             label="Senha"
@@ -41,6 +52,11 @@ const Login = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error && (
+            <Typography color="error" variant="body2">
+              {error}
+            </Typography>
+          )}
           <Button
             type="submit"
             variant="contained"
