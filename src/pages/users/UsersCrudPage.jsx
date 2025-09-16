@@ -7,6 +7,7 @@ import Number from '../../framework/components/fields/Number';
 import FilterSidebar from '../../framework/components/sidebar/FilterSidebar';
 import UserFilterForm from './UserFilterForm';
 import { Box } from 'framework/mui';
+import UserPhoto from '../../components/UserPhoto';
 
 const EMPTY_VALUES = {
   q: '',
@@ -28,6 +29,11 @@ const UsersCrudPage = () => {
   
 
   const columns = [
+    {
+      label: 'Foto',
+      field: (row) => <UserPhoto userId={row.id} />,
+      sortable: false,
+    },
     {
       label: 'Identificador',
       field: (row) => <Number value={row.id} />,

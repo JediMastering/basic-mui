@@ -102,7 +102,7 @@ const CrudTable = forwardRef(({
   const handleCreateSuccess = () => {
     showSnackbar('Registro criado com sucesso!', 'success');
     handleCloseCreateModal();
-    tableRef.current?.reload();
+    tableRef.current?.reload(currentUrl);
   };
 
   const handleEditSuccess = () => {
@@ -110,7 +110,7 @@ const CrudTable = forwardRef(({
     handleCloseEditModal();
     setSelectedRows([]);
     setSelectedIds([]);
-    tableRef.current?.reload();
+    tableRef.current?.reload(currentUrl);
   };
 
   return (

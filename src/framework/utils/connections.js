@@ -71,8 +71,10 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
   const accessToken = localStorage.getItem('accessToken');
 
   // Create Authorization header if accessToken is available
-  const headers = {};
-  if (accessToken && accessToken) {
+  const headers = {
+    ...(config?.headers || {}),
+  };
+  if (accessToken && url !== 'login') {
     headers.Authorization = `Bearer ${accessToken}`;
   }
 
@@ -81,8 +83,8 @@ export async function apiRequest({ url, method = 'GET', data, config, useMock = 
       url: urlrequest,
       method: httpMethod,
       data,
-      headers,
       ...config,
+      headers,
     });
 
     return response.data;

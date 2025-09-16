@@ -5,9 +5,9 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(config => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user && user.accessToken) {
-        config.headers.Authorization = `Bearer ${user.accessToken}`;
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+        config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
 });
@@ -16,7 +16,7 @@ api.interceptors.response.use(
     response => response,
     error => {
         if (error.response && error.response.status === 401) {
-            localStorage.removeItem('user');
+            localStorage.removeItem('accessToken');
             // We need to use a navigation mechanism that works outside of a component.
             // A simple page reload will force a redirect to the login page if the route is protected.
             window.location.href = '/login'; 

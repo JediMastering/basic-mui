@@ -3,6 +3,7 @@ export {
   Alert,
   alpha,
   AppBar,
+  Avatar,
   Badge,
   Box,
   Button,
