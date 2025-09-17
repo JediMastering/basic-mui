@@ -69,6 +69,16 @@ const AccessGroupForm = ({ open, onClose, onSuccess, submitUrl, initialValues, m
               )}
             />
             <Controller
+              name={`permissions.${nodes.id}.create`}
+              control={control}
+              render={({ field }) => (
+                <FormControlLabel
+                  control={<Checkbox {...field} checked={field.value || false} />}
+                  label="Criar"
+                />
+              )}
+            />
+            <Controller
               name={`permissions.${nodes.id}.edit`}
               control={control}
               render={({ field }) => (
