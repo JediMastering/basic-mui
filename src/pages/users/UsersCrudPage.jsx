@@ -36,9 +36,9 @@ const UsersCrudPage = () => {
     },
     {
       label: 'Identificador',
-      field: (row) => <Number value={row.id} />,
+      field: (row) => <Number value={row.userId} />,
       sortable: true,
-      columnName: 'id',
+      columnName: 'userId',
     },
     {
       label: 'Username',

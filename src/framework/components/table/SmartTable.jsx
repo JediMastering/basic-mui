@@ -96,10 +96,21 @@ const SmartTable = forwardRef(({
     }
   }, [page, sortColumn, sortDirection, url, externalData, pageSize, filters]);
 
-  const isSelected = (row) => selectedRows.includes(rowKey(row));
+  // Adicionar verificação de chaves únicas para depuração
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development' && data && typeof rowKey === 'function') {
+      const keys = data.map(row => rowKey(row));
+      const uniqueKeys = new Set(keys);
+      if (keys.length !== uniqueKeys.size) {
+        console.warn('SmartTable: A prop `rowKey` está retornando valores não únicos. Isso pode levar a um comportamento incorreto na seleção de linhas. Certifique-se de que `rowKey` retorne um identificador único para cada linha.');
+      }
+    }
+  }, [data, rowKey]);
+
+  const isSelected = (row) => typeof rowKey === 'function' && selectedRows.includes(rowKey(row));
 
   const handleSelectAll = (event) => {
-    if (!onRowSelect) return;
+    if (!onRowSelect || typeof rowKey !== 'function') return;
 
     if (event.target.checked) {
       const newSelected = data.map((row) => rowKey(row));
@@ -111,7 +122,7 @@ const SmartTable = forwardRef(({
   };
 
   const handleSelectRow = (row) => {
-    if (!onRowSelect) return;
+    if (!onRowSelect || typeof rowKey !== 'function') return;
 
     const key = rowKey(row);
     const selectedIndex = selectedRows.indexOf(key);
@@ -198,7 +209,7 @@ const SmartTable = forwardRef(({
                 const colKey = typeof col.field === 'string' ? col.field : col.columnName;
                 return (
                   <TableCell
-                    key={index}
+                    key={colKey}
                     align={col.align || 'left'}
                     sortDirection={sortColumn === colKey ? sortDirection : false}
                     onClick={() => handleSort(col)}
@@ -256,11 +267,14 @@ const SmartTable = forwardRef(({
                       <Checkbox checked={isSelected(row)} onChange={() => handleSelectRow(row)} />
                     </TableCell>
                   )}
-                  {columns.map((col, i) => (
-                    <TableCell key={i} align={col.align || 'left'} style={{padding:0}}>
-                      {renderCell(col, row)}
-                    </TableCell>
-                  ))}
+                  {columns.map((col) => {
+                    const colKey = typeof col.field === 'string' ? col.field : col.columnName;
+                    return (
+                      <TableCell key={colKey} align={col.align || 'left'} style={{padding:0}}>
+                        {renderCell(col, row)}
+                      </TableCell>
+                    );
+                  })}
                 </TableRow>
               ))
             )}

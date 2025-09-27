@@ -101,6 +101,7 @@ const AccessGroupCrudPage = () => {
             url="access-groups"
             title="Grupos de Acesso"
             EditForm={AccessGroupForm}
+            rowKey={(row) => row.id}
           />
         </Box>
       </Box>

@@ -64,15 +64,15 @@ const getNumber = (input, defaultValue = 0, decimalPlaces = 2, useThousandSepara
     }
 };
 
-const Number = ({ value, decimalPlaces, defaultValue }) => {
+const FormattedNumber = ({ value, decimalPlaces, defaultValue }) => {
     const formattedNumber = getNumber(value, defaultValue, decimalPlaces);
     return <Text value={formattedNumber} />;
 };
 
-Number.propTypes = {
+FormattedNumber.propTypes = {
     value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     decimalPlaces: PropTypes.number,
     defaultValue: PropTypes.number
 };
 
-export default Number;
+export default FormattedNumber;

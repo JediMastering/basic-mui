@@ -18,7 +18,7 @@ const CrudTable = forwardRef(({
   title,
   EditForm,
   CreateForm = EditForm,
-  rowKey = row => row.id,
+  rowKey = row => row.userId,
   pageSize = 50,
   useMock = false,
 }, ref) => {
@@ -75,8 +75,8 @@ const CrudTable = forwardRef(({
     try {
       const deletePromises = selectedRows.map(async row => {
         try {
-          await apiRequest({ url: `${url}/${row.id}`, method: 'DELETE', useMock });
-          return { success: true, id: row.id };
+          await apiRequest({ url: `${url}/${rowKey(row)}`, method: 'DELETE', useMock });
+          return { success: true, id: rowKey(row) };
         } catch (error) {
           return { success: false, id: row.id, error };
         }
@@ -185,8 +185,8 @@ const CrudTable = forwardRef(({
           open={editModalOpen}
           onClose={handleCloseEditModal}
           onSuccess={handleEditSuccess}
-          submitUrl={`${url}/${selectedRows[0].id}`}
-          initialValues={selectedRows[0]}
+          submitUrl={url}
+          initialValues={{ ...selectedRows[0], id: rowKey(selectedRows[0]) }}
         />
       )}
 

@@ -26,8 +26,13 @@ const AccessGroupForm = ({ open, onClose, onSuccess, submitUrl, initialValues, m
   const onSubmit = async (data) => {
     try {
       const method = initialValues?.id ? 'PUT' : 'POST';
-      const url = initialValues?.id ? `${submitUrl}` : submitUrl;
-      await apiRequest({ url, method, data });
+      let apiUrl = submitUrl; // Base URL
+
+      if (initialValues?.id) { // If editing, append the ID
+        apiUrl = `${submitUrl}/${initialValues.id}`;
+      }
+
+      await apiRequest({ url: apiUrl, method, data });
       onSuccess?.();
       onClose();
     } catch (error) {

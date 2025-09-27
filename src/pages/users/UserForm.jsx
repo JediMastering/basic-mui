@@ -24,10 +24,11 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState(null);
   const fileInputRef = useRef(null);
-  const { control, handleSubmit, reset, setValue, watch } = useForm({
+  const { control, handleSubmit, reset, setValue, watch, setError } = useForm({
     resolver: yupResolver(userValidationSchema),
     defaultValues: {
       username: '',
+      email: '',
       password: '',
       accessGroupIds: [],
       photo: null,
@@ -58,38 +59,41 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
 
   const onSubmit = async (data) => {
     try {
-      let currentUserId = initialValues?.id;
-      let reqMethod = currentUserId ? 'PUT' : method;
-      let submitApiUrl = currentUserId ? `${submitUrl}` : submitUrl;
+      let userIdForOperations = initialValues?.id;
+      let finalUserData = { ...data }; // Data to be sent in the final PUT/POST
 
-      // If it's a new user, create the user first to get an ID
-      if (!currentUserId) {
-        const newUser = await apiRequest({ url: submitApiUrl, method: reqMethod, data });
-        currentUserId = newUser.id; // Get the ID of the newly created user
-        reqMethod = 'PUT'; // Subsequent calls will be updates
-        submitApiUrl = `${submitUrl}/${currentUserId}`; // Update submit URL
+      // 1. Handle new user creation (POST)
+      if (!userIdForOperations) {
+        const { photo, ...createUserData } = data; // Exclude photo from initial POST
+        const newUserResponse = await apiRequest({ url: submitUrl, method: 'POST', data: createUserData });
+
+        if (!newUserResponse || !newUserResponse.userId) {
+          throw new Error('Erro ao criar usuário: ID não retornado pelo servidor.');
+        }
+        userIdForOperations = newUserResponse.userId;
+        finalUserData = { ...newUserResponse, ...data }; // Merge response with form data
       }
 
-      // Handle photo deletion
+      // 2. Handle photo deletion
       if (photoToDelete) {
         try {
           await apiRequest({
             url: `api/v1/attachments/${photoToDelete}`,
             method: 'DELETE',
           });
-          data.photo = null; // Clear the photo from the form data
+          finalUserData.photo = null;
         } catch (error) {
           console.error('Erro ao deletar imagem:', error);
-          // Optionally, show an error message to the user
         }
       }
 
-      // Handle photo upload
-      if (selectedFile && currentUserId) {
+      // 3. Handle photo upload
+      let photoUploaded = false;
+      if (selectedFile && userIdForOperations) {
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('entityType', 'USER');
-        formData.append('entityId', currentUserId);
+        formData.append('entityId', userIdForOperations);
 
         setIsUploading(true);
         setUploadError(null);
@@ -105,22 +109,26 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
               },
             },
           });
-          data.photo = response.id; // Update the form data with the new attachment ID
+          finalUserData.photo = response.id;
+          photoUploaded = true;
         } catch (error) {
           console.error('Erro ao fazer upload da imagem:', error);
           setUploadError('Falha no upload da imagem. Tente novamente.');
           setIsUploading(false);
-          return; // Stop submission if upload fails
+          return;
         } finally {
           setIsUploading(false);
         }
       }
 
-      // Finally, submit the user data (if it's an update or if it's a new user and photo was uploaded)
-      await apiRequest({ url: submitApiUrl, method: reqMethod, data });
-      onSuccess?.();
+      // 4. Final update (PUT) if it's an existing user OR if a photo was uploaded for a new user
+      if (initialValues?.id || photoUploaded) {
+        const finalApiUrl = `${submitUrl}/${userIdForOperations}`; // Always construct with base URL + ID
+        await apiRequest({ url: finalApiUrl, method: 'PUT', data: finalUserData });
+      }
 
-      // Reset local photo-related states to prevent flicker
+      onSuccess?.();
+      // Reset local photo-related states
       setPhotoPreview(null);
       setSelectedFile(null);
       setPhotoToDelete(null);
@@ -130,6 +138,17 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
       onClose();
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
+      if (error.response && error.response.data && error.response.data.details) {
+        error.response.data.details.forEach(detail => {
+          if (detail.field && detail.message) {
+            setError(detail.field, { type: 'manual', message: detail.message });
+          }
+        });
+      } else {
+        // Fallback for generic errors or if the structure is different
+        // You might want to use a snackbar here for general errors
+        // showSnackbar('Erro ao enviar formulário. Tente novamente.', 'error');
+      }
     }
   };
 
@@ -157,7 +176,7 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
         setAccessGroups(data);
         const formValues = initialValues
           ? { ...initialValues, accessGroupIds: initialValues.accessGroupIds || [] }
-          : { username: '', password: '', accessGroupIds: [], photo: null };
+          : { username: '', email: '', password: '', accessGroupIds: [], photo: null };
         reset(formValues);
         fetchAttachmentId();
         if (initialValues?.id) {
@@ -245,7 +264,14 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
           name="username"
           control={control}
           render={({ field, fieldState: { error } }) => (
-            <TextField {...field} label="Username" fullWidth error={!!error} helperText={error?.message} />
+            <TextField {...field} label="Username" fullWidth error={!!error} helperText={error?.message} autoComplete="off" />
+          )}
+        />
+        <Controller
+          name="email"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <TextField {...field} label="Email" fullWidth error={!!error} helperText={error?.message} autoComplete="off" />
           )}
         />
         <Controller
@@ -259,6 +285,7 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
               fullWidth
               error={!!error}
               helperText={error?.message}
+              autoComplete="new-password"
             />
           )}
         />
