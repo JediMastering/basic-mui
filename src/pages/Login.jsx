@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { TextField, Button, Box, Typography, Container } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { TextField, Button, Box, Typography, Container, Link } from "@mui/material";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { authService } from "../service/authService";
 
 const Login = () => {
@@ -66,6 +66,9 @@ const Login = () => {
           >
             Entrar
           </Button>
+          <Link component={RouterLink} to="/forgot-password" variant="body2" sx={{ mt: 2, display: 'block', textAlign: 'center' }}>
+            Esqueceu a senha?
+          </Link>
         </form>
       </Box>
     </Container>

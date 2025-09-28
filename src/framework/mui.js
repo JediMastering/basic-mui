@@ -57,6 +57,7 @@ export {
   Typography,
   useMediaQuery,
   useTheme,
+  Link,
 } from '@mui/material';
 
 export { ptBR } from '@mui/material/locale';
