@@ -236,7 +236,7 @@ const SmartTable = forwardRef(({
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
+            {loading && data.length === 0 ? (
               Array.from({ length: 10 }).map((_, i) => (
                 <TableRow key={i}>
                   {selectable && (
