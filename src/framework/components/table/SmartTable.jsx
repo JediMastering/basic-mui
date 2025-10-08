@@ -62,8 +62,9 @@ const SmartTable = forwardRef(({
   const total = externalTotal || pageData.totalElements || 0;
 
   // Função para buscar dados
-  const fetchData = async (pageNum, sortCol, sortDir, currentFilters) => {
-    if (!url) return;
+  const fetchData = async (pageNum, sortCol, sortDir, currentFilters, newUrl) => {
+    const urlToFetch = newUrl || url;
+    if (!urlToFetch) return;
 
     setLoading(true);
     try {
@@ -73,14 +74,23 @@ const SmartTable = forwardRef(({
         ...(sortCol && sortDir ? { sort: `${sortCol},${sortDir}` } : {}),
         ...currentFilters
       });
-      const response = await getData(url, params);
+      const response = await getData(urlToFetch, params);
 
-      setPageData({
-        content: response.content || [],
-        number: response.number || pageNum,
-        size: response.size || pageSize,
-        totalElements: response.totalElements || 0,
-      });
+      if (Array.isArray(response)) {
+        setPageData({
+          content: response,
+          number: 0,
+          size: response.length,
+          totalElements: response.length,
+        });
+      } else {
+        setPageData({
+          content: response.content || [],
+          number: response.number || pageNum,
+          size: response.size || pageSize,
+          totalElements: response.totalElements || 0,
+        });
+      }
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
       setPageData({ content: [], number: pageNum, size: pageSize, totalElements: 0 });
@@ -172,8 +182,8 @@ const SmartTable = forwardRef(({
 
   // Expondo o método de recarga para o componente pai
   useImperativeHandle(ref, () => ({
-    reload: () => {
-      fetchData(page, sortColumn, sortDirection, filters);
+    reload: (newUrl) => {
+      fetchData(page, sortColumn, sortDirection, filters, newUrl);
     },
     filter: (newFilters) => {
       handleFilterChange(newFilters);

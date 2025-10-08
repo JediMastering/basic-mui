@@ -60,6 +60,11 @@ export {
   Link,
 } from '@mui/material';
 
+export {
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from '@mui/icons-material';
+
 export { ptBR } from '@mui/material/locale';
 
 export { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';

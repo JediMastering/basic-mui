@@ -19,5 +19,12 @@ export const menuItems = [
     icon: '/icons/suppliers.svg',
     path: '/access-groups-crud',
     description: 'Gerenciamento de grupos de acesso'
+  },
+  {
+    id: 4,
+    name: 'Categorias',
+    icon: '/icons/products.svg',
+    path: '/categories',
+    description: 'Gerenciamento de categorias'
   }
 ];

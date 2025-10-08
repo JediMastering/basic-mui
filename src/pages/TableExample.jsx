@@ -194,7 +194,7 @@ export default function EnhancedTable() {
                 console.log(e)
             }
         }
-        debugger;
+
         fetchData();
     },[]);
 

@@ -5,6 +5,7 @@ import UsersCrudPage from "../pages/users/UsersCrudPage";
 import AccessGroupCrudPage from "../pages/access-groups/AccessGroupCrudPage";
 import ForgotPassword from "../pages/auth/ForgotPassword"; // New import
 import ResetPassword from "../pages/auth/ResetPassword";   // New import
+import { CategoryListPage } from '../modules/category';
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
@@ -13,6 +14,7 @@ const routes = [
   { path: "/example", element: <ExamplePage />, isProtected: true },
   { path: "/users-crud", element: <UsersCrudPage />, isProtected: true },
   { path: "/access-groups-crud", element: <AccessGroupCrudPage />, isProtected: true },
+  { path: "/categories", element: <CategoryListPage />, isProtected: true },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
 

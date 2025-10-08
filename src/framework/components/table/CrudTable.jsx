@@ -36,8 +36,10 @@ const CrudTable = forwardRef(({
     reload: (newUrl) => {
       if (newUrl) {
         setCurrentUrl(newUrl);
+        tableRef.current?.reload(newUrl);
+      } else {
+        tableRef.current?.reload(currentUrl);
       }
-      tableRef.current?.reload();
     }
   }));
 
@@ -170,7 +172,7 @@ const CrudTable = forwardRef(({
         />
       </Box>
 
-      {CreateForm && (
+      {createModalOpen && CreateForm && (
         <CreateForm
           open={createModalOpen}
           onClose={handleCloseCreateModal}
@@ -180,7 +182,7 @@ const CrudTable = forwardRef(({
         />
       )}
 
-      {EditForm && selectedRows.length === 1 && (
+      {editModalOpen && EditForm && selectedRows.length === 1 && (
         <EditForm
           open={editModalOpen}
           onClose={handleCloseEditModal}
