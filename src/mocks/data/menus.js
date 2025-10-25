@@ -26,5 +26,12 @@ export const menuItems = [
     icon: '/icons/products.svg',
     path: '/categories',
     description: 'Gerenciamento de categorias'
+  },
+  {
+    id: 5,
+    name: 'Planos',
+    icon: '/icons/sales.svg',
+    path: '/plans',
+    description: 'Gerenciamento de planos'
   }
 ];

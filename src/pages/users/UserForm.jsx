@@ -30,6 +30,7 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
       username: '',
       email: '',
       password: '',
+      passwordConfirmation: '',
       accessGroupIds: [],
       photo: null,
     },
@@ -61,6 +62,14 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
     try {
       let userIdForOperations = initialValues?.id;
       let finalUserData = { ...data }; // Data to be sent in the final PUT/POST
+
+      // Se a senha não for fornecida (string vazia), remova-a do objeto de dados
+      if (!finalUserData.password) {
+        delete finalUserData.password;
+      }
+
+      // Remova sempre a confirmação da senha para não ser enviada
+      delete finalUserData.passwordConfirmation;
 
       // 1. Handle new user creation (POST)
       if (!userIdForOperations) {
@@ -175,8 +184,8 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
       apiRequest({ url: 'access-groups/all', method: 'GET', useMock: false }).then((data) => {
         setAccessGroups(data);
         const formValues = initialValues
-          ? { ...initialValues, accessGroupIds: initialValues.accessGroupIds || [] }
-          : { username: '', email: '', password: '', accessGroupIds: [], photo: null };
+          ? { ...initialValues, accessGroupIds: initialValues.accessGroupIds || [], password: '', passwordConfirmation: '' }
+          : { username: '', email: '', password: '', passwordConfirmation: '', accessGroupIds: [], photo: null };
         reset(formValues);
         fetchAttachmentId();
         if (initialValues?.id) {
@@ -281,6 +290,21 @@ const UserForm = ({ open, onClose, onSuccess, submitUrl, initialValues, method }
             <TextField
               {...field}
               label="Password"
+              type="password"
+              fullWidth
+              error={!!error}
+              helperText={error?.message}
+              autoComplete="new-password"
+            />
+          )}
+        />
+        <Controller
+          name="passwordConfirmation"
+          control={control}
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              {...field}
+              label="Confirmar Password"
               type="password"
               fullWidth
               error={!!error}

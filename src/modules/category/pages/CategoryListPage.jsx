@@ -8,7 +8,7 @@ import { Box } from 'framework/mui';
 import { useExamplePage } from '../../../framework/hooks/useExamplePage';
 
 const EMPTY_VALUES = {
-  name: '',
+  q: '',
   includeInactive: false,
 };
 
@@ -40,24 +40,16 @@ const CategoryListPage = () => {
     },
   ];
 
-  const handleFilter = () => {
-    const values = formRef.current?.getValues() || {};
-    
-    const cleanedFilters = Object.entries(values).reduce((acc, [key, value]) => {
-      if (value) { // Value can be boolean false, so don't check for truthiness
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
+  const handleFilter = (values) => {
 
-    setFilterValues(cleanedFilters);
-    setHasActiveFilters(Object.keys(cleanedFilters).length > 0);
-    
-    const searchParams = new URLSearchParams();
-    Object.entries(cleanedFilters).forEach(([key, value]) => {
-      searchParams.append(key, value);
-    });
-    
+    const activeFilters = Object.fromEntries(
+      Object.entries(values).filter(([, value]) => value !== '' && value !== false)
+    );
+    setHasActiveFilters(Object.keys(activeFilters).length > 0);
+    setFilterValues(values);
+
+    const searchParams = new URLSearchParams(activeFilters);
+
     if (tableRef.current) {
       tableRef.current.reload(`api/categories?${searchParams.toString()}`);
     }

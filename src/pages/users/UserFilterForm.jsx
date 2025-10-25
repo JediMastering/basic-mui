@@ -9,7 +9,7 @@ const EMPTY_VALUES = {
 };
 
 const UserFilterForm = forwardRef(({ defaultValues, onFilter, id }, ref) => {
-  const { register, reset, getValues } = useForm({
+  const { register, reset, getValues, handleSubmit } = useForm({
     defaultValues: defaultValues || EMPTY_VALUES
   });
 
@@ -22,15 +22,8 @@ const UserFilterForm = forwardRef(({ defaultValues, onFilter, id }, ref) => {
     getValues
   }));
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (onFilter) {
-      onFilter();
-    }
-  };
-
   return (
-    <form id={id} onSubmit={handleSubmit}>
+    <form id={id} onSubmit={handleSubmit(onFilter)}>
       <Stack spacing={2}>
         <TextField
           label="Nome"

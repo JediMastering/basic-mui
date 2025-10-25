@@ -44,24 +44,15 @@ const AccessGroupCrudPage = () => {
     },
   ];
 
-  const handleFilter = () => {
-    const values = formRef.current?.getValues() || {};
-    
-    const cleanedFilters = Object.entries(values).reduce((acc, [key, value]) => {
-      if (value && value.trim() !== '') {
-        acc[key] = value;
-      }
-      return acc;
-    }, {});
+  const handleFilter = (values) => {
+    const activeFilters = Object.fromEntries(
+      Object.entries(values).filter(([, value]) => value && value.trim() !== '')
+    );
+    setHasActiveFilters(Object.keys(activeFilters).length > 0);
+    setFilterValues(values);
 
-    setFilterValues(cleanedFilters);
-    setHasActiveFilters(Object.keys(cleanedFilters).length > 0);
-    
-    const searchParams = new URLSearchParams();
-    Object.entries(cleanedFilters).forEach(([key, value]) => {
-      searchParams.append(key, value);
-    });
-    
+    const searchParams = new URLSearchParams(activeFilters);
+
     if (tableRef.current) {
       tableRef.current.reload(`access-groups?${searchParams.toString()}`);
     }
