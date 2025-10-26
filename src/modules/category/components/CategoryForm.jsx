@@ -13,7 +13,7 @@ export default function CategoryForm({ register, errors }) {
   return (
     <Stack spacing={2} pt={1}>
       <TextField
-        label="Name"
+        label="Nome"
         {...register('name')}
         error={!!errors.name}
         helperText={errors.name?.message}

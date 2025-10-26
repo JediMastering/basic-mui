@@ -5,6 +5,7 @@ import FilterSidebar from '../../../framework/components/sidebar/FilterSidebar';
 import CategoryFilterForm from '../components/CategoryFilterForm';
 import CategoryFormModal from '../components/CategoryFormModal';
 import { Box } from 'framework/mui';
+import { useExamplePage } from '../../../framework/hooks/useExamplePage';
 
 const EMPTY_VALUES = {
   name: '',
@@ -12,11 +13,12 @@ const EMPTY_VALUES = {
 };
 
 const CategoryListPage = () => {
-  // Note: useExamplePage hook is used in UserCrudPage, but it's for demo content.
-  // We will use a simplified config here.
+  const { sidebarConfig } = useExamplePage();
+
   const headerConfig = {
     title: 'Categories',
-    showSearch: false,
+    subtitle: 'Gerencie as categorias do sistema',
+    showMenuButton: true,
   };
 
   const [filterValues, setFilterValues] = useState(EMPTY_VALUES);
@@ -26,7 +28,7 @@ const CategoryListPage = () => {
 
   const columns = [
     {
-      label: 'Name',
+      label: 'Nome',
       field: 'name',
       sortable: true,
     },
@@ -75,7 +77,7 @@ const CategoryListPage = () => {
   return (
     <AppLayout
       headerConfig={headerConfig}
-      // navigationConfig can be added if needed
+      navigationConfig={sidebarConfig}
     >
       <Box sx={{ display: 'flex', height: '100%' }}>
         <FilterSidebar

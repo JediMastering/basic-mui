@@ -27,7 +27,7 @@ const CategoryFilterForm = forwardRef(({ defaultValues, onFilter, id }, ref) => 
     <form id={id} onSubmit={handleSubmit(onFilter)}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
         <TextField
-          label="Search by Name"
+          label="Nome"
           variant="outlined"
           size="small"
           fullWidth

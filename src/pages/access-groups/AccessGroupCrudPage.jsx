@@ -16,9 +16,14 @@ const EMPTY_VALUES = {
 
 const AccessGroupCrudPage = () => {
   const {
-    headerConfig,
     sidebarConfig,
   } = useExamplePage();
+
+  const headerConfig = {
+    title: "Grupos de Acesso",
+    subtitle: "Gerencie os grupos de acesso do sistema",
+    showMenuButton: true,
+  };
 
   const [filterValues, setFilterValues] = useState(EMPTY_VALUES);
   const [hasActiveFilters, setHasActiveFilters] = useState(false);

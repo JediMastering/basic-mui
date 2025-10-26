@@ -17,10 +17,14 @@ const EMPTY_VALUES = {
 
 const UsersCrudPage = () => {
   const {
-    headerConfig,
     sidebarConfig,
   } = useExamplePage();
 
+  const headerConfig = {
+    title: "Usuários",
+    subtitle: "Gerencie os usuários do sistema",
+    showMenuButton: true,
+  };
   const [filterValues, setFilterValues] = useState(EMPTY_VALUES);
   const [hasActiveFilters, setHasActiveFilters] = useState(false);
   const tableRef = useRef();
