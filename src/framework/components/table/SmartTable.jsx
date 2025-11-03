@@ -174,9 +174,15 @@ const SmartTable = forwardRef(({
   };
 
   const renderCell = (col, row) => {
+    // Se col.render existir, use-o para renderizar o valor
+    if (typeof col.render === 'function') {
+      return col.render(row[col.field], row);
+    }
+    // Se col.field for uma função, use-a
     if (typeof col.field === 'function') {
       return col.field(row);
     }
+    // Caso contrário, use o componente Text padrão
     return <Text value={row[col.field]} />;
   };
 

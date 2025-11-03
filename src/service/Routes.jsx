@@ -7,6 +7,9 @@ import ForgotPassword from "../pages/auth/ForgotPassword"; // New import
 import ResetPassword from "../pages/auth/ResetPassword";   // New import
 import { CategoryListPage } from '../modules/category';
 import { PlanListPage } from "../modules/plan";
+import { PaymentMethodListPage } from '../modules/payment-method';
+import { AccountListPage } from '../modules/account';
+import TransactionListPage from "../modules/transaction/pages/TransactionListPage";
 
 const routes = [
   { path: "/", element: <Login />, isProtected: false },
@@ -17,6 +20,9 @@ const routes = [
   { path: "/access-groups-crud", element: <AccessGroupCrudPage />, isProtected: true },
   { path: "/categories", element: <CategoryListPage />, isProtected: true },
   { path: "/plans", element: <PlanListPage />, isProtected: true },
+  { path: "/payment-methods", element: <PaymentMethodListPage />, isProtected: true },
+  { path: "/accounts", element: <AccountListPage />, isProtected: true },
+  { path: "/transactions", element: <TransactionListPage />, isProtected: true },
   { path: "*", element: <NotFound />, isProtected: false },
 ];
 

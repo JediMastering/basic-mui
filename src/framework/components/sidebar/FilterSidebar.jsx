@@ -86,8 +86,9 @@ const FilterSidebar = ({
   };
 
   const drawerContent = (
-    <>
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      {/* Header - fixo no topo */}
+      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
         <Typography variant="h6" component="div" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           {title}
           {hasActiveFilters && (
@@ -107,46 +108,51 @@ const FilterSidebar = ({
         </IconButton>
       </Box>
       <Divider />
-      <Box sx={{ p: 2 }}>
-        <Stack spacing={2}>
-          {children}
 
-          <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<FilterListIcon />}
-              fullWidth
-              type="submit"
-              form={formId}
-            >
-              Filtrar
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleClear}
-              startIcon={<FilterAltOffIcon />}
-              fullWidth
-              disabled={!hasActiveFilters}
-              sx={{
-                color: 'white',
-                borderColor: 'white',
-                '&:hover': {
-                  borderColor: 'white',
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
-                },
-                '&.Mui-disabled': {
-                  color: 'rgba(255, 255, 255, 0.3)',
-                  borderColor: 'rgba(255, 255, 255, 0.3)'
-                }
-              }}
-            >
-              Limpar
-            </Button>
-          </Box>
-        </Stack>
+      {/* Área de filtros com scroll */}
+      <Box sx={{ flexGrow: 1, overflowY: 'auto', overflowX: 'hidden' }}>
+        <Box sx={{ p: 2 }}>
+          {children}
+        </Box>
       </Box>
-    </>
+
+      {/* Botões de ação - fixos no fundo */}
+      <Box sx={{ p: 2, flexShrink: 0, borderTop: 1, borderColor: 'divider' }}>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FilterListIcon />}
+            fullWidth
+            type="submit"
+            form={formId}
+          >
+            Filtrar
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={handleClear}
+            startIcon={<FilterAltOffIcon />}
+            fullWidth
+            disabled={!hasActiveFilters}
+            sx={{
+              color: 'white',
+              borderColor: 'white',
+              '&:hover': {
+                borderColor: 'white',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)'
+              },
+              '&.Mui-disabled': {
+                color: 'rgba(255, 255, 255, 0.3)',
+                borderColor: 'rgba(255, 255, 255, 0.3)'
+              }
+            }}
+          >
+            Limpar
+          </Button>
+        </Box>
+      </Box>
+    </Box>
   );
 
   return (
@@ -221,7 +227,7 @@ const FilterSidebar = ({
               width: drawerWidth,
               position: 'relative',
               height: '100%',
-              overflowY: 'visible',
+              overflowY: 'hidden',
               border: 'none',
               borderRight: 1,
               borderColor: 'divider',

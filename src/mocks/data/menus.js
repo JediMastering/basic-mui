@@ -33,5 +33,26 @@ export const menuItems = [
     icon: '/icons/sales.svg',
     path: '/plans',
     description: 'Gerenciamento de planos'
+  },
+  {
+    id: 6,
+    name: 'Métodos de Pagamento',
+    icon: '/icons/sales.svg',
+    path: '/payment-methods',
+    description: 'Gerenciamento de métodos de pagamento'
+  },
+  {
+    id: 7,
+    name: 'Contas',
+    icon: '/icons/dashboard.svg',
+    path: '/accounts',
+    description: 'Gerenciamento de contas bancárias'
+  },
+  {
+    id: 8,
+    name: 'Transações',
+    icon: '/icons/sales.svg',
+    path: '/transactions',
+    description: 'Gerenciamento de transações financeiras'
   }
 ];
